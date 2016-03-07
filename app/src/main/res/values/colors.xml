@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#93cc41</color>
+    <color name="colorPrimaryDark">#6cb308</color>
+    <color name="colorAccent">#fbfbfb</color>
+    <color name="colorButtonDark">#666565</color>
+    <color name="fab_color_1">#ff5252</color>
+    <color name="fab_color_1_muted">#ff8080</color>
+</resources>
