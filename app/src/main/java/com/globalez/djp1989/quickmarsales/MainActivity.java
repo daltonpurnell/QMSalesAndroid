@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
@@ -23,6 +24,7 @@ import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,7 +42,9 @@ import com.cloudmine.api.CMObject;
 
 import com.cloudmine.api.CMSessionToken;
 import com.cloudmine.api.CMUser;
+import com.cloudmine.api.SearchQuery;
 import com.cloudmine.api.db.LocallySavableCMObject;
+import com.cloudmine.api.rest.HeaderFactory;
 import com.cloudmine.api.rest.response.CMObjectResponse;
 import com.cloudmine.api.rest.response.CMResponse;
 import com.cloudmine.api.rest.response.ObjectModificationResponse;
@@ -57,11 +61,14 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.http.message.BasicHeader;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -72,11 +79,18 @@ public class MainActivity extends AppCompatActivity {
     private DropboxAPI<AndroidAuthSession> mDBApi;
     public static ArrayList<CMObject> contactsArrayList = new ArrayList<>();
     public static ArrayAdapter<CMObject> customArrayAdapter;
+    public static final String LOG_TAG = "log tag";
+    public static final String KEY_CODE = "KEY CODE";
+
+
+
+
 
 
     // cloudmine stuff
     private static final String APP_ID = "96364aa624d843d78404473216281ffc";
     private static final String API_KEY = "442844B89DF645A4B4A8043CD378BA19";
+    private static CMSessionToken currentUserSessionToken;
 
 
     /**
@@ -169,58 +183,98 @@ if (key != null && secret != null) {
 
 
         /** ATTENTION: initialization of cloudmine **/
+        // check if unique id has been set in user preferences ( if not, set it)
+//        String savedUniqueId = prefs.getString("Unique Id Key", null);
+//
+//        if (savedUniqueId == null) {
+//            prefs.edit().putString("Unique Id Key", UNIQUE_ID_KEY);
+//        } else {
+//
+//            System.out.println("Unique Id Key set:" + savedUniqueId);
+//
+//        }
+
         // This will initialize your credentials
         CMApiCredentials.initialize(APP_ID, API_KEY, getApplicationContext());
 
-        // get all user objects from cloudmine
-//
-//            CMUser user = currentUser
-////            CMSessionToken sessionToken = user.getSessionToken();
-//
-//            LocallySavableCMObject.loadAllObjects(this, sessionToken, new Response.Listener<CMObjectResponse>() {
-//                @Override
-//                public void onResponse(CMObjectResponse objectResponse) {
-//
-//                    for (CMObject object: objectResponse.getObjects()) {
-//
-//                        CMObject salesContact = object;
-//                        contactsArrayList.add(object);
-//                        System.out.println("" + salesContact);
-//                    }
-//
-//                }
-//            });
-
 
         // get all objects from cloudmine
-        LocallySavableCMObject.loadAllObjects(getApplicationContext(), new Response.Listener<CMObjectResponse>() {
-            @Override
-            public void onResponse(CMObjectResponse response) {
-                for (CMObject object : response.getObjects()) {
-                    // put objects in array
-                    CMObject salesContact = object;
-                    contactsArrayList.add(salesContact);
+//        LocallySavableCMObject.loadAllObjects(getApplicationContext(), new Response.Listener<CMObjectResponse>() {
+//            @Override
+//            public void onResponse(CMObjectResponse response) {
+//                for (CMObject object : response.getObjects()) {
+//                    // put objects in array
+//                    CMObject salesContact = object;
+//                    contactsArrayList.add(salesContact);
+//
+//                    System.out.println("" + salesContact);
+//                }
+//            }
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError volleyError) {
+//
+//                System.out.println("ERROR:" + volleyError);
+//
+//            }
+//        });
 
-                    System.out.println("" + salesContact);
+
+// load all user created objects
+        SharedPreferences settings = getApplicationContext().getSharedPreferences("UserInfo", 0);
+
+        String userName = settings.getString("Username", "");
+
+        CMUser.searchUserProfiles(getApplicationContext(), SearchQuery.filter("email").equal(userName).searchQuery(), new Response.Listener<CMObjectResponse>() {
+            @Override
+            public void onResponse(CMObjectResponse objectResponse) {
+
+                for (CMObject object : objectResponse.getObjects()) {
+                    CMObject currentUser = object;
+                    CMSessionToken currentUserSessionToken = ((CMUser) currentUser).getSessionToken();
+                    System.out.println("" + currentUserSessionToken);
+
+                    LocallySavableCMObject.loadAllObjects(getApplicationContext(), currentUserSessionToken, new Response.Listener<CMObjectResponse>() {
+                        @Override
+                        public void onResponse(CMObjectResponse objectResponse) {
+                            for (CMObject object : objectResponse.getObjects()) {
+                                // put objects in array
+                                CMObject salesContact = object;
+                                contactsArrayList.add(salesContact);
+
+                                System.out.println("" + salesContact);
+                            }
+
+                        }
+                    });
+
+
                 }
+
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-
                 System.out.println("ERROR:" + volleyError);
-
             }
         });
 
 
+
+
+
+
+
+
         /** ATTENTION: check for current user **/
-        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+//        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
         if ((settings.getString("Username", "")).isEmpty() && (settings.getString("Password", "")).isEmpty()) {
 
 
             Intent intent = new Intent(this, LoginSignupActivity.class);
             startActivity(intent);
+
+
 
         }
 
@@ -906,7 +960,6 @@ if (key != null && secret != null) {
         }
 
 
-
         @Override
         public void onActivityResult(int requestCode, int resultCode, Intent data) {
             if (resultCode == RESULT_OK) {
@@ -1013,10 +1066,49 @@ if (key != null && secret != null) {
                         }
 
 
-                        LocallySavableCMObject.saveObjects(getActivity(), Arrays.asList(salesContact), new Response.Listener<ObjectModificationResponse>() {
+//                        LocallySavableCMObject.saveObjects(getActivity(), Arrays.asList(salesContact), new Response.Listener<ObjectModificationResponse>() {
+//
+//
+//
+//                            @Override
+//                            public void onResponse(ObjectModificationResponse objectModificationResponse) {
+//
+//                                contactsArrayList.add(salesContact);
+//                                customArrayAdapter.notifyDataSetChanged();
+//                                Toast.makeText(getContext(), "Contact added", Toast.LENGTH_SHORT).show();
+//
+//                            }
+//                        });
+
+                        SharedPreferences prefs = getActivity().getSharedPreferences("UserInfo", 0);
+                        String userName = prefs.getString("Username", "");
+                        System.out.println("USERNAME:" + userName);
 
 
 
+                        CMUser.searchUserProfiles(getContext(), SearchQuery.filter("email").equal(userName).searchQuery(), new Response.Listener<CMObjectResponse>() {
+
+                            @Override
+                            public void onResponse(CMObjectResponse objectResponse) {
+
+                                for (CMObject object : objectResponse.getObjects()) {
+                                    CMObject currentUser = object;
+                                    currentUserSessionToken = ((CMUser) currentUser).getSessionToken();
+                                    System.out.println("SESSION TOKEN" + currentUserSessionToken);
+
+                                }
+
+                            }
+
+                        }, new Response.ErrorListener() {
+                            @Override
+                            public void onErrorResponse(VolleyError volleyError) {
+                                System.out.println("ERROR:" + volleyError);
+                            }
+                        });
+
+
+                        LocallySavableCMObject.saveObjects(getActivity(), Arrays.asList(salesContact), currentUserSessionToken, new Response.Listener<ObjectModificationResponse>() {
                             @Override
                             public void onResponse(ObjectModificationResponse objectModificationResponse) {
 
@@ -1028,24 +1120,10 @@ if (key != null && secret != null) {
                         });
 
 
-//
-//                        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-//                        String sessionToken = prefs.getString("token", null);
-//
-//                        LocallySavableCMObject.saveObjects(getActivity(), Arrays.asList(salesContact), sessionToken, new Response.Listener<ObjectModificationResponse>() {
-//                            @Override
-//                            public void onResponse(ObjectModificationResponse objectModificationResponse) {
-//
-//                        contactsArrayList.add(salesContact);
-//                        customArrayAdapter.notifyDataSetChanged();
-//                        Toast.makeText(getContext(), "Contact added", Toast.LENGTH_SHORT).show();
-//
-//                            }
-//                        });
-
-
                         break;
                 }
+
+
             }
 
              else {
