@@ -1,10 +1,15 @@
 package com.globalez.djp1989.quickmarsales;
 
 
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceActivity;
@@ -56,17 +61,26 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.buddy.sdk.*;
+import com.buddy.sdk.models.*;
 
 import org.apache.http.message.BasicHeader;
 
@@ -77,20 +91,16 @@ public class MainActivity extends AppCompatActivity {
     final static private String APP_KEY = "h88oe108wiudpge";
     final static private String APP_SECRET = "i69qzlz9mxk6jiu";
     private DropboxAPI<AndroidAuthSession> mDBApi;
-    public static ArrayList<CMObject> contactsArrayList = new ArrayList<>();
-    public static ArrayAdapter<CMObject> customArrayAdapter;
-    public static final String LOG_TAG = "log tag";
-    public static final String KEY_CODE = "KEY CODE";
-
-
-
-
+//    public static ArrayList<Picture> contactsArrayList = new ArrayList<>();
+    public static ArrayAdapter<Picture> customArrayAdapter;
+    public static final String TAG = "tag";
 
 
     // cloudmine stuff
     private static final String APP_ID = "96364aa624d843d78404473216281ffc";
     private static final String API_KEY = "442844B89DF645A4B4A8043CD378BA19";
     private static CMSessionToken currentUserSessionToken;
+    private static CustomCMUser currentUserObject;
 
 
     /**
@@ -152,92 +162,37 @@ if (key != null && secret != null) {
     AndroidAuthSession session = new AndroidAuthSession(appKeys);
     mDBApi = new DropboxAPI<AndroidAuthSession>(session);
 
-
-
-//    AsyncTask.execute(new Runnable() {
-//        @Override
-//        public void run() {
-//
-//            try {
-//                File file = new File("working-draft.txt");
-//                FileInputStream inputStream = new FileInputStream(file);
-//                DropboxAPI.Entry response = mDBApi.putFile("/magnum-opus.txt", inputStream, file.length(), null, null);
-//                Log.i("DbExampleLog", "The uploaded file's rev is: " + response.rev);
-//
-//            } catch (FileNotFoundException | DropboxException ex) {
-//                System.out.println("Exception" + ex);
-//            }
-//
-//        }});
-
     System.out.println("Connected to dropbox");
 
 } else {
-    AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-    AndroidAuthSession session = new AndroidAuthSession(appKeys);
-    mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-    mDBApi.getSession().startOAuth2Authentication(this);
-    prefs.edit().putString("App key", APP_KEY).apply();
-    prefs.edit().putString("App secret", APP_SECRET).apply();
-}
+        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
+        AndroidAuthSession session = new AndroidAuthSession(appKeys);
+        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+        mDBApi.getSession().startOAuth2Authentication(this);
+        prefs.edit().putString("App key", APP_KEY).apply();
+        prefs.edit().putString("App secret", APP_SECRET).apply();
+
+
+    }
 
 
         /** ATTENTION: initialization of cloudmine **/
-        // check if unique id has been set in user preferences ( if not, set it)
-//        String savedUniqueId = prefs.getString("Unique Id Key", null);
-//
-//        if (savedUniqueId == null) {
-//            prefs.edit().putString("Unique Id Key", UNIQUE_ID_KEY);
-//        } else {
-//
-//            System.out.println("Unique Id Key set:" + savedUniqueId);
-//
-//        }
 
         // This will initialize your credentials
         CMApiCredentials.initialize(APP_ID, API_KEY, getApplicationContext());
 
 
-
-// load all user created objects
+        // load all user created objects
         SharedPreferences settings = getApplicationContext().getSharedPreferences("UserInfo", 0);
 
         String userName = settings.getString("Username", "");
-
-        CMUser.searchUserProfiles(getApplicationContext(), SearchQuery.filter("email").equal(userName).searchQuery(), new Response.Listener<CMObjectResponse>() {
-            @Override
-            public void onResponse(CMObjectResponse objectResponse) {
-
-                for (CMObject object : objectResponse.getObjects()) {
-                    CMObject currentUser = object;
-                    currentUserSessionToken = ((CMUser) currentUser).getSessionToken();
-                    System.out.println("" + currentUserSessionToken);
+        System.out.println("Saved Username: " + userName);
 
 
-                }
 
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                System.out.println("ERROR:" + volleyError);
-            }
-        });
+                            // initialize buddy //
 
-
-        LocallySavableCMObject.loadAllObjects(getApplicationContext(), currentUserSessionToken, new Response.Listener<CMObjectResponse>() {
-            @Override
-            public void onResponse(CMObjectResponse objectResponse) {
-                for (CMObject object : objectResponse.getObjects()) {
-                    // put objects in array
-                    CMObject salesContact = object;
-                    contactsArrayList.add(salesContact);
-
-                    System.out.println("" + salesContact);
-                }
-
-            }
-        });
+        Buddy.init(getApplicationContext(), "bbbbbc.jmbCPKPDbsdgc", "eb4c3f5f-04a3-1316-f8b3-6d2b2a095688");
 
 
 
@@ -245,8 +200,8 @@ if (key != null && secret != null) {
 
 
         /** ATTENTION: check for current user **/
-//        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-        if ((settings.getString("Username", "")).isEmpty() && (settings.getString("Password", "")).isEmpty()) {
+////        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
+//        if ((settings.getString("Username", "")).isEmpty() && (settings.getString("Password", "")).isEmpty()) {
 
 
             Intent intent = new Intent(this, LoginSignupActivity.class);
@@ -254,7 +209,7 @@ if (key != null && secret != null) {
 
 
 
-        }
+//        }
 
 
     }
@@ -285,6 +240,8 @@ if (key != null && secret != null) {
             //noinspection SimplifiableIfStatement
             if (id == R.id.action_settings) {
 
+//                Buddy.logoutUser();
+
                 Intent intent = new Intent(this, LoginSignupActivity.class);
                 startActivity(intent);
 
@@ -294,19 +251,9 @@ if (key != null && secret != null) {
         } else {
 
 
-
-//            // assume this user exists and has been logged in
-//            user.logout(this, new Response.Listener<CMResponse>() {
-//                @Override
-//                public void onResponse(CMResponse cmResponse) {
-//                    Log.d(TAG, "Session token invalidated? " + cmResponse.wasSuccess());
-//                }
-//            }, new Response.ErrorListener() {
-//                @Override
-//                public void onErrorResponse(VolleyError volleyError) {
-//
-//                }
-//            });
+            // search for user in database to see if they are logged in
+            String userName = settings.getString("Username", "");
+            System.out.println("USERNAME: " + userName);
 
 
         }
@@ -881,7 +828,7 @@ if (key != null && secret != null) {
             //populate list view here//
             ListView list = (ListView) rootView.findViewById(R.id.mainList);
 
-            customArrayAdapter = new CustomAdapter(getActivity(), R.layout.customrow, contactsArrayList);
+            customArrayAdapter = new CustomAdapter(getActivity(), R.layout.customrow, LoginSignupActivity.resultList);
             customArrayAdapter.notifyDataSetChanged();
 
             list.setAdapter(customArrayAdapter);
@@ -1019,66 +966,43 @@ if (key != null && secret != null) {
                         }
 
 
+                        // save object to buddy//
 
-                        // save object to cloudmine//
+                        // generate a PNG for upload...
+                         Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bitmap);
+                        MyRoundedCornerDrawable drawable = new MyRoundedCornerDrawable(bitmap);
+                        drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
+                        drawable.draw(canvas);
 
-                        final QMSalesContact salesContact = new QMSalesContact();
-
-                        if (name != null) {
-                            salesContact.setName("" + name);
-                        } else {
-                            salesContact.setName("No name");
-                        }
-
-                        if (email != null) {
-                            salesContact.setEmailAddress("" + email);
-                        } else {
-
-                            salesContact.setEmailAddress("No email address");
-                        }
-
-                        if (phoneNumber != null) {
-                            salesContact.setPhoneNumber("" + phoneNumber);
-                        } else {
-                            salesContact.setPhoneNumber("No phone number");
-                        }
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 10, stream);
+                        byte[] bytes = stream.toByteArray();
+                        InputStream is = new ByteArrayInputStream(bytes);
 
 
-                        SharedPreferences prefs = getActivity().getSharedPreferences("UserInfo", 0);
-                        String userName = prefs.getString("Username", "");
-                        System.out.println("USERNAME:" + userName);
+                        // save object to buddy
+                        Map<String, Object> parameters = new HashMap<>();
+                        parameters.put("data", new BuddyFile(is, "image/png"));
+                        parameters.put("caption", "" + email);
+                        parameters.put("watermark", "" + phoneNumber);
+                        parameters.put("readPermissions", "User");
+                        parameters.put("writePermissions", "User");
+                        parameters.put("title", "" + name);
 
-
-
-                        CMUser.searchUserProfiles(getContext(), SearchQuery.filter("email").equal(userName).searchQuery(), new Response.Listener<CMObjectResponse>() {
-
+                        Buddy.<Picture>post("/pictures", parameters, new BuddyCallback<Picture>(Picture.class) {
                             @Override
-                            public void onResponse(CMObjectResponse objectResponse) {
+                            public void completed(BuddyResult<Picture> result) {
+                                // Your callback code here
 
-                                for (CMObject object : objectResponse.getObjects()) {
-                                    CMObject currentUser = object;
-                                    currentUserSessionToken = ((CMUser) currentUser).getSessionToken();
-                                    System.out.println("SESSION TOKEN" + currentUserSessionToken);
+                                if (result.getResult() != null) {
+                                    System.out.println("Object saved to buddy");
+                                    customArrayAdapter.notifyDataSetChanged();
 
+                                } else {
+
+                                    System.out.println("there was an error saving your contact");
                                 }
-
-                            }
-
-                        }, new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError volleyError) {
-                                System.out.println("ERROR:" + volleyError);
-                            }
-                        });
-
-
-                        LocallySavableCMObject.saveObjects(getActivity(), Arrays.asList(salesContact), currentUserSessionToken, new Response.Listener<ObjectModificationResponse>() {
-                            @Override
-                            public void onResponse(ObjectModificationResponse objectModificationResponse) {
-
-                                contactsArrayList.add(salesContact);
-                                customArrayAdapter.notifyDataSetChanged();
-                                Toast.makeText(getContext(), "Contact added", Toast.LENGTH_SHORT).show();
 
                             }
                         });

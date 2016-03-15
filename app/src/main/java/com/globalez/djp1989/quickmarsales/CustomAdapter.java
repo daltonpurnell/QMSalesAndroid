@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.Picture;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.DropBoxManager;
@@ -31,6 +32,8 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.buddy.sdk.Buddy;
+import com.buddy.sdk.BuddyFile;
 import com.cloudmine.api.CMObject;
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
@@ -54,10 +57,10 @@ import java.util.List;
  * Created by djp1989 on 2/25/16.
  */
 
-public class CustomAdapter extends ArrayAdapter<CMObject> {
+public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
     private Context mContext;
-    private List<CMObject> mcontactList = new ArrayList<>();
+    private List<com.buddy.sdk.models.Picture> mcontactList = new ArrayList<>();
     public String nameString = "";
     public String phoneNumberString = "";
     public String emailString = "";
@@ -69,7 +72,7 @@ public class CustomAdapter extends ArrayAdapter<CMObject> {
 
 
 
-    public CustomAdapter(Context context, int resource, List<CMObject> contactList) {
+    public CustomAdapter(Context context, int resource, List<com.buddy.sdk.models.Picture> contactList) {
 
         super(context, resource, contactList);
 
@@ -101,11 +104,12 @@ public class CustomAdapter extends ArrayAdapter<CMObject> {
         }
 
 
-        final CMObject salesContactObject = mcontactList.get(position);
+        final com.buddy.sdk.models.Picture salesContactObject = mcontactList.get(position);
 
-        emailString = ((QMSalesContact) salesContactObject).getEmailAddress();
-        nameString = ((QMSalesContact) salesContactObject).getName();
-        phoneNumberString = ((QMSalesContact) salesContactObject).getPhoneNumber();
+        emailString = (salesContactObject).caption;
+
+        nameString = (salesContactObject).title;
+        phoneNumberString = (salesContactObject).watermark;
 
         holder.nameTextView.setText(nameString);
         holder.phoneNumberTextView.setText(phoneNumberString);
@@ -127,34 +131,34 @@ public class CustomAdapter extends ArrayAdapter<CMObject> {
 
                             selectedItemsArrayList.add("Request A Demo");
 
-                        } else if (position == 1) {
+                        } if (position == 1) {
 
                             selectedItemsArrayList.add("Request A Training");
-                        } else if (position == 2) {
+                        }  if (position == 2) {
 
                             selectedItemsArrayList.add("Hardware Requirements");
-                        } else if (position == 3) {
+                        } if (position == 3) {
 
                             selectedItemsArrayList.add("Order Materials");
-                        } else if (position == 4) {
+                        } if (position == 4) {
 
                             selectedItemsArrayList.add("View Training Materials");
-                        } else if (position == 5) {
+                        }if (position == 5) {
 
                             selectedItemsArrayList.add("Sample Project Plan");
-                        } else if (position == 6) {
+                        }if (position == 6) {
 
                             selectedItemsArrayList.add("QuickMAR University");
-                        } else if (position == 7) {
+                        }if (position == 7) {
 
                             selectedItemsArrayList.add("News");
-                        } else if (position == 8) {
+                        } if (position == 8) {
 
                             selectedItemsArrayList.add("Brochure");
-                        } else if (position == 9) {
+                        }if (position == 9) {
 
                             selectedItemsArrayList.add("Fact Sheet");
-                        } else if (position == 10) {
+                        }if (position == 10) {
 
                             selectedItemsArrayList.add("I bought QuickMAR. Now what?");
                         }
@@ -349,56 +353,56 @@ public class CustomAdapter extends ArrayAdapter<CMObject> {
                             // add link to links array
                             linksArrayList.add("http://www.quickmar.com/demo");
 
-                        } else if (handyRefItemsList.contains("Request A Training")) {
+                        } if (handyRefItemsList.contains("Request A Training")) {
 
                             // add link (doesn't exist yet) to links array
                             linksArrayList.add("http://www.quickmar.com/demo");
 
-                        } else if (handyRefItemsList.contains("Order Materials")) {
+                        } if (handyRefItemsList.contains("Order Materials")) {
 
                             // add link and password to links array
                             linksArrayList.add("http://www.quickmar.com/demo \n " +
                                     "Your username to enter this site is:  \n " +
                                     "Your password is: ");
 
-                        } else if (handyRefItemsList.contains("QuickMAR University")) {
+                        }  if (handyRefItemsList.contains("QuickMAR University")) {
 
                             // add link and password to links array
                             linksArrayList.add("http://www.quickmar.com/demo \n " +
                                     "Your username to enter this site is: shared_training \n " +
                                     "Your password is: password701");
 
-                        } else if (handyRefItemsList.contains("News")) {
+                        }  if (handyRefItemsList.contains("News")) {
 
                             // add link to links array
                             linksArrayList.add("http://www.quickmar.com/demo");
 
-                        } else if (handyRefItemsList.contains("Hardware Requirements")) {
+                        }  if (handyRefItemsList.contains("Hardware Requirements")) {
 
                             // attach downloaded file
 //                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
 
-                        } else if (handyRefItemsList.contains("Training Course Outlines")) {
+                        }  if (handyRefItemsList.contains("Training Course Outlines")) {
 
                             // attach downloaded file
 //                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
 
-                        } else if (handyRefItemsList.contains("Sample Project Plan")) {
+                        }  if (handyRefItemsList.contains("Sample Project Plan")) {
 
                             // downloaded file
 //                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
 
-                        } else if (handyRefItemsList.contains("Brochure")) {
+                        }  if (handyRefItemsList.contains("Brochure")) {
 
                             // attach downloaded file
                             attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
 
-                        } else if (handyRefItemsList.contains("Fact Sheet")) {
+                        }  if (handyRefItemsList.contains("Fact Sheet")) {
 
                             // attach downloaded file
 //                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
 
-                        } else if (handyRefItemsList.contains("I bought QuickMAR. Now what?")) {
+                        }  if (handyRefItemsList.contains("I bought QuickMAR. Now what?")) {
 
                             // attach downloaded file
 //                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
@@ -470,7 +474,7 @@ public void attachFile(String filename, Intent i) {
     File root = Environment.getExternalStorageDirectory();
     File file = new File(root, filename);
     if (!file.exists() || !file.canRead()) {
-        Toast.makeText(getContext(), "Attachment Error", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(), "Error attaching files", Toast.LENGTH_SHORT).show();
         return;
     }
 
