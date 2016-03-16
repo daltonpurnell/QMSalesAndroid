@@ -351,26 +351,25 @@ if (savedAccessToken != null) {
 
 
 // upload file to dropbox
-//                    AsyncTask.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//
-//                            try {
-//                                File file = new File("/storage/emulated/0/Download/Hardware Requirements.pdf");
-//                                FileInputStream inputStream = new FileInputStream(file);
-//                                DropboxAPI.Entry response = mDBApi.putFile("/Hardware Requirements.pdf", inputStream,
-//                                        file.length(), null, null);
-//                                Log.i("DbExampleLog", "The uploaded file's rev is: " + response.rev);
-//                            } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                System.out.println("ERROR: " + ex);
-//                            }
-//
-//
-//                        }
-//                    });
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
 
+
+                            try {
+                                File file = new File("/storage/emulated/0/Download/Sample Project Plan.pdf");
+                                FileInputStream inputStream = new FileInputStream(file);
+                                DropboxAPI.Entry response = mDBApi.putFile("/Sample Project Plan.pdf", inputStream,
+                                        file.length(), null, null);
+                                Log.i("DbExampleLog", "Sample project plan's rev is: " + response.rev);
+                            } catch (FileNotFoundException | DropboxException ex) {
+
+                                System.out.println("ERROR: " + ex);
+                            }
+
+
+                        }
+                    });
 
 
                 } catch (IllegalStateException e) {
@@ -488,7 +487,7 @@ if (savedAccessToken != null) {
 
 //
 //            // create list of items
-            String[] handyRefItems = new String[] {"Request A Demo", "Request A Training", "Hardware Requirements", "Order Materials", "View Training Materials", "Sample Project Plan",  "QuickMAR University", "News", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
+            String[] handyRefItems = new String[] {"Request A Demo", "Request A Training", "Hardware Requirements", "Order Materials", "View Training Course Outlines", "Sample Project Plan",  "QuickMAR University", "News", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
 //
             ArrayList<String> handyRefItemsList = new ArrayList<>();
             handyRefItemsList.addAll(Arrays.asList(handyRefItems));

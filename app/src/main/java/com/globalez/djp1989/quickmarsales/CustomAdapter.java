@@ -60,7 +60,7 @@ import java.util.List;
  * Created by djp1989 on 2/25/16.
  */
 
-public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
+public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
     private Context mContext;
     private List<com.buddy.sdk.models.Picture> mcontactList = new ArrayList<>();
@@ -202,20 +202,19 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
 
+                        AsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
 
 
-                        // create intent for email activity //
-                            final Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
+                                // create intent for email activity //
+                                final Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 
                             // download selected files and send as attachment
                             if (selectedItemsArrayList.contains("Hardware Requirements")) {
 
                                 // download file
                              if (isExternalStorageWritable()) {
-
-                                 AsyncTask.execute(new Runnable() {
-                                     @Override
-                                     public void run() {
 
 
                                          try {
@@ -231,9 +230,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                                              System.out.println("Exception:" + ex);
                                          }
 
-                                     }
-                                 });
-
 
                              } else {
 
@@ -244,53 +240,57 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                             if (selectedItemsArrayList.contains("Training Course Outlines")) {
 
                                 // doesn't exist yet
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+                             if (isExternalStorageWritable()) {
 
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
+
+                                         try {
+
+                                             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Training Outlines.pdf");
+                                             FileOutputStream outputStream = new FileOutputStream(file);
+                                             DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Training Outlines.pdf", null, outputStream, null);
+                                             Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+                                             System.out.println("Success! File downloaded!");
+                                             System.out.println("file path: " + file);
+
+
+
+                                         } catch (FileNotFoundException | DropboxException ex) {
+
+                                             System.out.println("Exception:" + ex);
+                                         }
+
+
+
+                             } else {
+
+                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+                             }
 
                             }
                             if (selectedItemsArrayList.contains("Sample Project Plan")) {
 
                                 // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+                             if (isExternalStorageWritable()) {
 
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
+                                 try {
+
+                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Sample Project Plan.pdf");
+                                     FileOutputStream outputStream = new FileOutputStream(file);
+                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Sample Project Plan.pdf", null, outputStream, null);
+                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+                                     System.out.println("Success! File downloaded!");
+                                     System.out.println("file path: " + file);
+
+
+                                 } catch (FileNotFoundException | DropboxException ex) {
+
+                                     System.out.println("Exception:" + ex);
+                                 }
+
+                             } else {
+
+                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+                             }
 
                             }
                             if (selectedItemsArrayList.contains("Brochure")) {
@@ -298,10 +298,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                                 // download file
                                 if (isExternalStorageWritable()) {
 
-
-                                    AsyncTask.execute(new Runnable() {
-                                        @Override
-                                        public void run() {
 
                                             try {
 
@@ -317,10 +313,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                                                 System.out.println("Exception:" + ex);
                                             }
 
-                                        }
-                                    });
-
-
                                 } else {
 
                                     Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
@@ -331,28 +323,29 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                             if (selectedItemsArrayList.contains("Fact Sheet")) {
 
                                 // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//                                        attachFile("", i);
+                             if (isExternalStorageWritable()) {
 
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
+
+                                         try {
+
+                                             File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Fact Sheet.pdf");
+                                             FileOutputStream outputStream = new FileOutputStream(file);
+                                             DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Fact Sheet.pdf", null, outputStream, null);
+                                             Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+                                             System.out.println("Success! file was downloaded");
+                                             System.out.println("file path: " + file);
+
+
+                                         } catch (FileNotFoundException | DropboxException ex) {
+
+                                             System.out.println("Exception:" + ex);
+                                         }
+
+
+                             } else {
+
+                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+                             }
 
 
                             }
@@ -414,6 +407,8 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
                             }
 
+
+
                         // set up message subject and body //
 
                             i.setType("message/rfc822");
@@ -422,42 +417,41 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                             i.putExtra(Intent.EXTRA_SUBJECT, "I would like to share some QuickMAR materials with you");
                             i.putExtra(Intent.EXTRA_TEXT, "" + linksArrayList);
 
-                        if (selectedItemsArrayList.contains("Brochure")) {
-
-                            attachFile("Brochure.pdf", i);
-
-                        }
-                        if (selectedItemsArrayList.contains("Hardware Requirements")) {
-
-                            attachFile("Hardware Requirements.pdf", i);
-
-                        }
-                        if (selectedItemsArrayList.contains("Training Course Outlines")) {
-
-//                            attachFile("Brochure.pdf", i);
-
-                        }
-                        if (selectedItemsArrayList.contains("Sample Project Plan")) {
-
-//                            attachFile("Brochure.pdf", i);
-
-                        }
-
-                        if (selectedItemsArrayList.contains("Fact Sheet")) {
-
-//                            attachFile("Brochure.pdf", i);
-
-                        }
-                        if (selectedItemsArrayList.contains("I bought QuickMAR. Now what?")) {
-
-//                            attachFile("Brochure.pdf", i);
-                        }
-
-
-                        i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uris);
-
-
                             try {
+
+                                if (selectedItemsArrayList.contains("Brochure")) {
+
+                                    attachFile("Brochure.pdf", i);
+
+                                }
+                                if (selectedItemsArrayList.contains("Hardware Requirements")) {
+
+                                    attachFile("Hardware Requirements.pdf", i);
+
+                                }
+                                if (selectedItemsArrayList.contains("Training Course Outlines")) {
+
+                                    attachFile("Training Outlines.pdf", i);
+
+                                }
+                                if (selectedItemsArrayList.contains("Sample Project Plan")) {
+
+                                    attachFile("Sample Project Plan.pdf", i);
+
+                                }
+
+                                if (selectedItemsArrayList.contains("Fact Sheet")) {
+
+                                    attachFile("Fact Sheet.pdf", i);
+
+                                }
+                                if (selectedItemsArrayList.contains("I bought QuickMAR. Now what?")) {
+
+//                                  attachFile("Now What.pdf", i);
+                                }
+
+
+                                i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uris);
 
                                 // launch email activity //
                                 getContext().startActivity(Intent.createChooser(i, "Send mail..."));
@@ -467,9 +461,12 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                                 Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
                             }
 
-                        }
-                });
 
+                            }
+                        });
+
+                    }
+                });
 
                 builder.setView(list);
                 AlertDialog dialog = builder.create();
@@ -502,7 +499,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
     }
 
 
-
     /* Checks if external storage is available for read and write */
     public boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
@@ -529,7 +525,6 @@ public void attachFile(String filename, Intent i) {
         System.out.println("Attaching file");
         Uri uri = Uri.parse("file://" + filelocation);
         Uris.add(uri);
-//        i.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
         System.out.println("Uploading from filepath: " + filelocation);
 
     }
