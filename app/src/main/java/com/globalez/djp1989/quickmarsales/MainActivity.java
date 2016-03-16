@@ -969,14 +969,14 @@ if (key != null && secret != null) {
                         // save object to buddy//
 
                         // generate a PNG for upload...
-                         Bitmap bitmap = Bitmap.createBitmap(10, 10, Bitmap.Config.ARGB_8888);
+                         Bitmap bitmap = Bitmap.createBitmap(30, 30, Bitmap.Config.ARGB_8888);
                         Canvas canvas = new Canvas(bitmap);
                         MyRoundedCornerDrawable drawable = new MyRoundedCornerDrawable(bitmap);
                         drawable.setBounds(0, 0, canvas.getWidth(), canvas.getHeight());
                         drawable.draw(canvas);
 
                         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bitmap.compress(Bitmap.CompressFormat.PNG, 10, stream);
+                        bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
                         byte[] bytes = stream.toByteArray();
                         InputStream is = new ByteArrayInputStream(bytes);
 
@@ -988,12 +988,13 @@ if (key != null && secret != null) {
                         parameters.put("watermark", "" + phoneNumber);
                         parameters.put("readPermissions", "User");
                         parameters.put("writePermissions", "User");
-                        parameters.put("title", "" + name);
+                        parameters.put("title", "" + name + "\n \n" + email + "\n \n" + phoneNumber);
 
                         Buddy.<Picture>post("/pictures", parameters, new BuddyCallback<Picture>(Picture.class) {
                             @Override
                             public void completed(BuddyResult<Picture> result) {
                                 // Your callback code here
+                                customArrayAdapter.notifyDataSetChanged();
 
                                 if (result.getResult() != null) {
                                     System.out.println("Object saved to buddy");

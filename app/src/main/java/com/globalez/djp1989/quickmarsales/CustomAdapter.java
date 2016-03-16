@@ -91,9 +91,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
             holder = new QMSalesContactHolder();
 
-            holder.phoneNumberTextView = (TextView) row.findViewById(R.id.phoneNumberTextView);
+//            holder.phoneNumberTextView = (TextView) row.findViewById(R.id.phoneNumberTextView);
             holder.nameTextView = (TextView) row.findViewById(R.id.nameTextView);
-            holder.addressTextView = (TextView) row.findViewById(R.id.emailTextView);
+//            holder.addressTextView = (TextView) row.findViewById(R.id.emailTextView);
             holder.sendMaterialsButton = (Button) row.findViewById(R.id.sendEmailButton);
 
             row.setTag(holder);
@@ -111,9 +111,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
         nameString = (salesContactObject).title;
         phoneNumberString = (salesContactObject).watermark;
 
-        holder.nameTextView.setText(nameString);
-        holder.phoneNumberTextView.setText(phoneNumberString);
-        holder.addressTextView.setText(emailString);
+        holder.nameTextView.setText("" + nameString);
+//        holder.phoneNumberTextView.setText(phoneNumberString);
+//        holder.addressTextView.setText(emailString);
 
         holder.sendMaterialsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -452,7 +452,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
 
     static class QMSalesContactHolder {
-        TextView phoneNumberTextView, nameTextView, addressTextView;
+        TextView nameTextView;
         Button sendMaterialsButton;
 
     }
