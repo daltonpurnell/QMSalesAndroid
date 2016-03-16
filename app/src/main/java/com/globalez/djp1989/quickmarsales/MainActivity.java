@@ -351,25 +351,25 @@ if (savedAccessToken != null) {
 
 
 // upload file to dropbox
-                    AsyncTask.execute(new Runnable() {
-                        @Override
-                        public void run() {
-
-
-                            try {
-                                File file = new File("/storage/emulated/0/Download/Sample Project Plan.pdf");
-                                FileInputStream inputStream = new FileInputStream(file);
-                                DropboxAPI.Entry response = mDBApi.putFile("/Sample Project Plan.pdf", inputStream,
-                                        file.length(), null, null);
-                                Log.i("DbExampleLog", "Sample project plan's rev is: " + response.rev);
-                            } catch (FileNotFoundException | DropboxException ex) {
-
-                                System.out.println("ERROR: " + ex);
-                            }
-
-
-                        }
-                    });
+//                    AsyncTask.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//                            try {
+//                                File file = new File("/storage/emulated/0/Download/Sample Project Plan.pdf");
+//                                FileInputStream inputStream = new FileInputStream(file);
+//                                DropboxAPI.Entry response = mDBApi.putFile("/Sample Project Plan.pdf", inputStream,
+//                                        file.length(), null, null);
+//                                Log.i("DbExampleLog", "Sample project plan's rev is: " + response.rev);
+//                            } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                System.out.println("ERROR: " + ex);
+//                            }
+//
+//
+//                        }
+//                    });
 
 
                 } catch (IllegalStateException e) {
