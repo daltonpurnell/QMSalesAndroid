@@ -357,9 +357,9 @@ if (savedAccessToken != null) {
 //
 //
 //                            try {
-//                                File file = new File("/storage/emulated/0/Download/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                File file = new File("/storage/emulated/0/Download/Hardware Requirements.pdf");
 //                                FileInputStream inputStream = new FileInputStream(file);
-//                                DropboxAPI.Entry response = mDBApi.putFile("/Brochure.pdf", inputStream,
+//                                DropboxAPI.Entry response = mDBApi.putFile("/Hardware Requirements.pdf", inputStream,
 //                                        file.length(), null, null);
 //                                Log.i("DbExampleLog", "The uploaded file's rev is: " + response.rev);
 //                            } catch (FileNotFoundException | DropboxException ex) {

@@ -49,6 +49,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -71,6 +72,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
     private DropboxAPI<AndroidAuthSession> mDBApi;
     final static private String APP_KEY = "h88oe108wiudpge";
     final static private String APP_SECRET = "i69qzlz9mxk6jiu";
+    public static ArrayList<Uri> Uris = new ArrayList<>();
 
 
 
@@ -203,33 +205,40 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
 
                         // create intent for email activity //
-                            final Intent i = new Intent(Intent.ACTION_SEND);
+                            final Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 
                             // download selected files and send as attachment
                             if (selectedItemsArrayList.contains("Hardware Requirements")) {
 
                                 // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+                             if (isExternalStorageWritable()) {
 
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
+                                 AsyncTask.execute(new Runnable() {
+                                     @Override
+                                     public void run() {
+
+
+                                         try {
+
+                                             File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Hardware Requirements.pdf");
+                                             FileOutputStream outputStream = new FileOutputStream(file);
+                                             DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Hardware Requirements.pdf", null, outputStream, null);
+                                             Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+                                             System.out.println("File downloaded");
+
+                                         } catch (FileNotFoundException | DropboxException ex) {
+
+                                             System.out.println("Exception:" + ex);
+                                         }
+
+                                     }
+                                 });
+
+
+                             } else {
+
+                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+                             }
 
                             }
                             if (selectedItemsArrayList.contains("Training Course Outlines")) {
@@ -420,7 +429,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                         }
                         if (selectedItemsArrayList.contains("Hardware Requirements")) {
 
-//                            attachFile("Brochure.pdf", i);
+                            attachFile("Hardware Requirements.pdf", i);
 
                         }
                         if (selectedItemsArrayList.contains("Training Course Outlines")) {
@@ -443,7 +452,10 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
 //                            attachFile("Brochure.pdf", i);
                         }
-                        
+
+
+                        i.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uris);
+
 
                             try {
 
@@ -515,7 +527,9 @@ public void attachFile(String filename, Intent i) {
     } else {
 
         System.out.println("Attaching file");
-        i.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
+        Uri uri = Uri.parse("file://" + filelocation);
+        Uris.add(uri);
+//        i.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
         System.out.println("Uploading from filepath: " + filelocation);
 
     }
