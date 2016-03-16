@@ -90,9 +90,11 @@ public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     final static private String APP_KEY = "h88oe108wiudpge";
     final static private String APP_SECRET = "i69qzlz9mxk6jiu";
-    private DropboxAPI<AndroidAuthSession> mDBApi;
-//    public static ArrayList<Picture> contactsArrayList = new ArrayList<>();
-    public static ArrayAdapter<Picture> customArrayAdapter;
+    public static DropboxAPI<AndroidAuthSession> mDBApi;
+    public static List<Picture> resultList;
+
+//    public static ArrayAdapter<Picture> customArrayAdapter;
+    public static CustomAdapter customArrayAdapter;
     public static final String TAG = "tag";
 
 
@@ -155,25 +157,28 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String key = prefs.getString("App key", null);
         String secret = prefs.getString("App secret", null);
+        String savedAccessToken = prefs.getString("Access token", null);
 
-if (key != null && secret != null) {
-
-    AppKeyPair appKeys = new AppKeyPair(key, secret);
-    AndroidAuthSession session = new AndroidAuthSession(appKeys);
-    mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+if (savedAccessToken != null) {
 
     System.out.println("Connected to dropbox");
+
 
 } else {
         AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session = new AndroidAuthSession(appKeys);
         mDBApi = new DropboxAPI<AndroidAuthSession>(session);
+
         mDBApi.getSession().startOAuth2Authentication(this);
         prefs.edit().putString("App key", APP_KEY).apply();
         prefs.edit().putString("App secret", APP_SECRET).apply();
 
+//        String AccessToken = mDBApi.getSession().getOAuth2AccessToken();
+//        prefs.edit().putString("Access token", AccessToken);
 
-    }
+
+
+}
 
 
         /** ATTENTION: initialization of cloudmine **/
@@ -209,6 +214,33 @@ if (key != null && secret != null) {
 
 
 
+//        } else {
+
+
+            // load contacts
+//            Map<String, Object> parameters = new HashMap<String, Object>();
+//
+//            Buddy.get("/pictures", parameters, new BuddyCallback<PagedResult>(PagedResult.class) {
+//                @Override
+//                public void completed(BuddyResult<PagedResult> result) {
+//
+//                    if (result.getResult() != null) {
+//
+//                        resultList = result.getResult().convertPageResults(Picture.class);
+//                        // Your callback code here
+//                        System.out.println("" + resultList);
+//
+//
+//                    } else {
+//
+//                        System.out.println("Could not load contacts");
+//
+//                    }
+//
+//                }
+//            });
+//
+//
 //        }
 
 
@@ -296,8 +328,10 @@ if (key != null && secret != null) {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String key = prefs.getString("App key", null);
         String secret = prefs.getString("App secret", null);
+        String savedAccessToken = prefs.getString("Access token", null);
 
-        if (key != null && secret != null) {
+
+        if (savedAccessToken != null) {
 
             System.out.println("Connected to dropbox");
 
@@ -308,9 +342,36 @@ if (key != null && secret != null) {
                     // Required to complete auth, sets the access token on the session
                     mDBApi.getSession().finishAuthentication();
 
-                    String accessToken = mDBApi.getSession().getOAuth2AccessToken();
+                    String AccessToken = mDBApi.getSession().getOAuth2AccessToken();
                     prefs.edit().putString("App key", APP_KEY).apply();
                     prefs.edit().putString("App secret", APP_SECRET).apply();
+                    prefs.edit().putString("Access token", AccessToken);
+
+                    System.out.println("Access Token: " + AccessToken);
+
+
+// upload file to dropbox
+//                    AsyncTask.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//                            try {
+//                                File file = new File("/storage/emulated/0/Download/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                FileInputStream inputStream = new FileInputStream(file);
+//                                DropboxAPI.Entry response = mDBApi.putFile("/Brochure.pdf", inputStream,
+//                                        file.length(), null, null);
+//                                Log.i("DbExampleLog", "The uploaded file's rev is: " + response.rev);
+//                            } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                System.out.println("ERROR: " + ex);
+//                            }
+//
+//
+//                        }
+//                    });
+
+
 
                 } catch (IllegalStateException e) {
                     Log.i("DbAuthLog", "Error authenticating", e);
@@ -830,6 +891,9 @@ if (key != null && secret != null) {
 
             customArrayAdapter = new CustomAdapter(getActivity(), R.layout.customrow, LoginSignupActivity.resultList);
             customArrayAdapter.notifyDataSetChanged();
+            customArrayAdapter.setmDBApi(mDBApi);
+
+
 
             list.setAdapter(customArrayAdapter);
 
@@ -984,11 +1048,11 @@ if (key != null && secret != null) {
                         // save object to buddy
                         Map<String, Object> parameters = new HashMap<>();
                         parameters.put("data", new BuddyFile(is, "image/png"));
-                        parameters.put("caption", "" + email);
                         parameters.put("watermark", "" + phoneNumber);
+                        parameters.put("caption", "" + email);
                         parameters.put("readPermissions", "User");
                         parameters.put("writePermissions", "User");
-                        parameters.put("title", "" + name + "\n \n" + email + "\n \n" + phoneNumber);
+                        parameters.put("title", "" + name);
 
                         Buddy.<Picture>post("/pictures", parameters, new BuddyCallback<Picture>(Picture.class) {
                             @Override
@@ -999,6 +1063,34 @@ if (key != null && secret != null) {
                                 if (result.getResult() != null) {
                                     System.out.println("Object saved to buddy");
                                     customArrayAdapter.notifyDataSetChanged();
+
+
+
+                                   // reload contacts
+                                    Map<String, Object> parameters = new HashMap<String, Object>();
+
+                                    Buddy.get("/pictures", parameters, new BuddyCallback<PagedResult>(PagedResult.class) {
+                                        @Override
+                                        public void completed(BuddyResult<PagedResult> result) {
+
+                                            if (result.getResult() != null) {
+
+                                                resultList = result.getResult().convertPageResults(Picture.class);
+                                                // Your callback code here
+                                                System.out.println("" + resultList);
+
+
+                                            } else {
+
+                                                System.out.println("Could not load contacts");
+
+                                            }
+
+                                        }
+                                    });
+
+
+
 
                                 } else {
 

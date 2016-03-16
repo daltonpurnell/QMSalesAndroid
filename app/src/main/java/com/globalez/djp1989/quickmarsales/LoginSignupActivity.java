@@ -65,10 +65,10 @@ public class LoginSignupActivity extends AppCompatActivity {
                     finish();
 
                     SharedPreferences settings = getSharedPreferences("UserInfo", 0);
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("Username", emailTextView1.getText().toString());
-                editor.putString("Password", passwordTextView1.getText().toString());
-                editor.apply();
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putString("Username", emailTextView1.getText().toString());
+                    editor.putString("Password", passwordTextView1.getText().toString());
+                    editor.apply();
 
 
                     Map<String, Object> parameters = new HashMap<String, Object>();

@@ -6,12 +6,14 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Picture;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.DropBoxManager;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.annotation.ColorInt;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
@@ -78,6 +80,12 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
         this.mContext = context;
         this.mcontactList = contactList;
+
+
+    }
+
+    public void setmDBApi(DropboxAPI api) {
+        mDBApi = api;
     }
 
     @Override
@@ -91,9 +99,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
             holder = new QMSalesContactHolder();
 
-//            holder.phoneNumberTextView = (TextView) row.findViewById(R.id.phoneNumberTextView);
+            holder.phoneNumberTextView = (TextView) row.findViewById(R.id.phoneNumberTextView);
             holder.nameTextView = (TextView) row.findViewById(R.id.nameTextView);
-//            holder.addressTextView = (TextView) row.findViewById(R.id.emailTextView);
+            holder.addressTextView = (TextView) row.findViewById(R.id.emailTextView);
             holder.sendMaterialsButton = (Button) row.findViewById(R.id.sendEmailButton);
 
             row.setTag(holder);
@@ -106,14 +114,14 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
         final com.buddy.sdk.models.Picture salesContactObject = mcontactList.get(position);
 
-        emailString = (salesContactObject).caption;
-
         nameString = (salesContactObject).title;
+        emailString = (salesContactObject).caption;
         phoneNumberString = (salesContactObject).watermark;
 
         holder.nameTextView.setText("" + nameString);
-//        holder.phoneNumberTextView.setText(phoneNumberString);
-//        holder.addressTextView.setText(emailString);
+        holder.addressTextView.setText("" + emailString);
+        holder.phoneNumberTextView.setText("" + phoneNumberString);
+
 
         holder.sendMaterialsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,34 +139,44 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
                             selectedItemsArrayList.add("Request A Demo");
 
-                        } if (position == 1) {
+                        }
+                        if (position == 1) {
 
                             selectedItemsArrayList.add("Request A Training");
-                        }  if (position == 2) {
+                        }
+                        if (position == 2) {
 
                             selectedItemsArrayList.add("Hardware Requirements");
-                        } if (position == 3) {
+                        }
+                        if (position == 3) {
 
                             selectedItemsArrayList.add("Order Materials");
-                        } if (position == 4) {
+                        }
+                        if (position == 4) {
 
                             selectedItemsArrayList.add("View Training Materials");
-                        }if (position == 5) {
+                        }
+                        if (position == 5) {
 
                             selectedItemsArrayList.add("Sample Project Plan");
-                        }if (position == 6) {
+                        }
+                        if (position == 6) {
 
                             selectedItemsArrayList.add("QuickMAR University");
-                        }if (position == 7) {
+                        }
+                        if (position == 7) {
 
                             selectedItemsArrayList.add("News");
-                        } if (position == 8) {
+                        }
+                        if (position == 8) {
 
                             selectedItemsArrayList.add("Brochure");
-                        }if (position == 9) {
+                        }
+                        if (position == 9) {
 
                             selectedItemsArrayList.add("Fact Sheet");
-                        }if (position == 10) {
+                        }
+                        if (position == 10) {
 
                             selectedItemsArrayList.add("I bought QuickMAR. Now what?");
                         }
@@ -180,266 +198,278 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
                 builder.setNegativeButton("Cancel", null);
                 builder.setPositiveButton("Send Email", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(DialogInterface dialog, int which){
-
-
-                        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-                        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-                        mDBApi = new DropboxAPI<>(session);
-
-
-
-                        // download selected files and send as attachment
-                         if (handyRefItemsList.contains("Hardware Requirements")) {
-
-                            // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
-
-                        } else if (handyRefItemsList.contains("Training Course Outlines")) {
-
-                            // doesn't exist yet
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
-
-                        } else if (handyRefItemsList.contains("Sample Project Plan")) {
-
-                            // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
-
-                        } else if (handyRefItemsList.contains("Brochure")) {
-
-                            // download file
-                            if (isExternalStorageWritable()) {
-
-                                try {
-
-                                    File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-                                    FileOutputStream outputStream = new FileOutputStream(file);
-                                    DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-                                    Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-                                    Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-
-
-                                } catch (FileNotFoundException | DropboxException ex) {
-
-                                    System.out.println("Exception:" + ex);
-                                }
-
-                            } else {
-
-                                Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-                            }
-
-
-                        } else if (handyRefItemsList.contains("Fact Sheet")) {
-
-                            // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
-
-
-                        } else if (handyRefItemsList.contains("I bought QuickMAR. Now what?")) {
-
-                            // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
-//
-//
-                        }
-
+                    public void onClick(DialogInterface dialog, int which) {
 
 
 
                         // create intent for email activity //
-                        Intent i = new Intent(Intent.ACTION_SEND);
+                            final Intent i = new Intent(Intent.ACTION_SEND);
+
+                            // download selected files and send as attachment
+                            if (selectedItemsArrayList.contains("Hardware Requirements")) {
+
+                                // download file
+//                             if (isExternalStorageWritable()) {
+//
+//                                 try {
+//
+//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                     FileOutputStream outputStream = new FileOutputStream(file);
+//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
+//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+
+//
+//
+//                                 } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                     System.out.println("Exception:" + ex);
+//                                 }
+//
+//                             } else {
+//
+//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+//                             }
+
+                            }
+                            if (selectedItemsArrayList.contains("Training Course Outlines")) {
+
+                                // doesn't exist yet
+//                             if (isExternalStorageWritable()) {
+//
+//                                 try {
+//
+//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                     FileOutputStream outputStream = new FileOutputStream(file);
+//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
+//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+
+//
+//
+//                                 } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                     System.out.println("Exception:" + ex);
+//                                 }
+//
+//                             } else {
+//
+//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+//                             }
+
+                            }
+                            if (selectedItemsArrayList.contains("Sample Project Plan")) {
+
+                                // download file
+//                             if (isExternalStorageWritable()) {
+//
+//                                 try {
+//
+//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                     FileOutputStream outputStream = new FileOutputStream(file);
+//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
+//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+
+//
+//
+//                                 } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                     System.out.println("Exception:" + ex);
+//                                 }
+//
+//                             } else {
+//
+//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+//                             }
+
+                            }
+                            if (selectedItemsArrayList.contains("Brochure")) {
+
+                                // download file
+                                if (isExternalStorageWritable()) {
 
 
-                        // attach necessary files/links //
+                                    AsyncTask.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
 
-                        if (handyRefItemsList.contains("Request A Demo")) {
+                                            try {
 
-                            // add link to links array
-                            linksArrayList.add("http://www.quickmar.com/demo");
+                                                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Brochure.pdf");
+                                                FileOutputStream outputStream = new FileOutputStream(file);
+                                                DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Brochure.pdf", null, outputStream, null);
+                                                Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+                                                System.out.println("Success! File downloaded!");
+                                                System.out.println("file path: " + file);
 
-                        } if (handyRefItemsList.contains("Request A Training")) {
+                                            } catch (FileNotFoundException | DropboxException ex) {
 
-                            // add link (doesn't exist yet) to links array
-                            linksArrayList.add("http://www.quickmar.com/demo");
+                                                System.out.println("Exception:" + ex);
+                                            }
 
-                        } if (handyRefItemsList.contains("Order Materials")) {
-
-                            // add link and password to links array
-                            linksArrayList.add("http://www.quickmar.com/demo \n " +
-                                    "Your username to enter this site is:  \n " +
-                                    "Your password is: ");
-
-                        }  if (handyRefItemsList.contains("QuickMAR University")) {
-
-                            // add link and password to links array
-                            linksArrayList.add("http://www.quickmar.com/demo \n " +
-                                    "Your username to enter this site is: shared_training \n " +
-                                    "Your password is: password701");
-
-                        }  if (handyRefItemsList.contains("News")) {
-
-                            // add link to links array
-                            linksArrayList.add("http://www.quickmar.com/demo");
-
-                        }  if (handyRefItemsList.contains("Hardware Requirements")) {
-
-                            // attach downloaded file
-//                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
-
-                        }  if (handyRefItemsList.contains("Training Course Outlines")) {
-
-                            // attach downloaded file
-//                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
-
-                        }  if (handyRefItemsList.contains("Sample Project Plan")) {
-
-                            // downloaded file
-//                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
-
-                        }  if (handyRefItemsList.contains("Brochure")) {
-
-                            // attach downloaded file
-                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
-
-                        }  if (handyRefItemsList.contains("Fact Sheet")) {
-
-                            // attach downloaded file
-//                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
-
-                        }  if (handyRefItemsList.contains("I bought QuickMAR. Now what?")) {
-
-                            // attach downloaded file
-//                            attachFile("CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", i);
-                        }
+                                        }
+                                    });
 
 
+                                } else {
+
+                                    Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+                                }
+
+
+                            }
+                            if (selectedItemsArrayList.contains("Fact Sheet")) {
+
+                                // download file
+//                             if (isExternalStorageWritable()) {
+//
+//                                 try {
+//
+//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                     FileOutputStream outputStream = new FileOutputStream(file);
+//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
+//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+//                                        attachFile("", i);
+
+//
+//
+//                                 } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                     System.out.println("Exception:" + ex);
+//                                 }
+//
+//                             } else {
+//
+//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+//                             }
+
+
+                            }
+                            if (selectedItemsArrayList.contains("I bought QuickMAR. Now what?")) {
+
+                                // download file
+//                             if (isExternalStorageWritable()) {
+//
+//                                 try {
+//
+//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
+//                                     FileOutputStream outputStream = new FileOutputStream(file);
+//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
+//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
+//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
+//                                        attachFile("", i);
+//
+//
+//                                 } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                     System.out.println("Exception:" + ex);
+//                                 }
+//
+//                             } else {
+//
+//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
+//                             }
+//
+//
+                            }
+
+
+                            if (selectedItemsArrayList.contains("Request A Demo")) {
+
+                                // add link to links array
+                                linksArrayList.add("http://www.quickmar.com/demo");
+
+                            }
+                            if (selectedItemsArrayList.contains("Request A Training")) {
+
+                                // add link (doesn't exist yet) to links array
+                                linksArrayList.add("http://www.quickmar.com/demo");
+
+                            }
+                            if (selectedItemsArrayList.contains("Order Materials")) {
+
+                                // add link and password to links array
+                                linksArrayList.add("http://www.quickmar.com/demo \n " +
+                                        "Your username to enter this site is:  \n " +
+                                        "Your password is: ");
+
+                            }
+                            if (selectedItemsArrayList.contains("QuickMAR University")) {
+
+                                // add link and password to links array
+                                linksArrayList.add("http://www.quickmar.com/demo \n " +
+                                        "Your username to enter this site is: shared_training \n " +
+                                        "Your password is: password701");
+
+                            }
 
                         // set up message subject and body //
 
-                        i.setType("message/rfc822");
-                        i.putExtra(Intent.EXTRA_EMAIL, new String[]{"" + emailString});
-                        i.putExtra(Intent.EXTRA_SUBJECT, "I would like to share some QuickMAR materials with you");
-                        i.putExtra(Intent.EXTRA_TEXT, "" + linksArrayList);
+                            i.setType("message/rfc822");
+                            String emailAddressString = (salesContactObject).caption;
+                            i.putExtra(Intent.EXTRA_EMAIL, new String[]{"" + emailAddressString});
+                            i.putExtra(Intent.EXTRA_SUBJECT, "I would like to share some QuickMAR materials with you");
+                            i.putExtra(Intent.EXTRA_TEXT, "" + linksArrayList);
 
-                try {
+                        if (selectedItemsArrayList.contains("Brochure")) {
 
-                    // launch email activity //
-                    getContext().startActivity(Intent.createChooser(i, "Send mail..."));
+                            attachFile("Brochure.pdf", i);
 
-                } catch (android.content.ActivityNotFoundException ex) {
+                        }
+                        if (selectedItemsArrayList.contains("Hardware Requirements")) {
 
-                    Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
-                }
+//                            attachFile("Brochure.pdf", i);
 
-                    }
+                        }
+                        if (selectedItemsArrayList.contains("Training Course Outlines")) {
+
+//                            attachFile("Brochure.pdf", i);
+
+                        }
+                        if (selectedItemsArrayList.contains("Sample Project Plan")) {
+
+//                            attachFile("Brochure.pdf", i);
+
+                        }
+
+                        if (selectedItemsArrayList.contains("Fact Sheet")) {
+
+//                            attachFile("Brochure.pdf", i);
+
+                        }
+                        if (selectedItemsArrayList.contains("I bought QuickMAR. Now what?")) {
+
+//                            attachFile("Brochure.pdf", i);
+                        }
+                        
+
+                            try {
+
+                                // launch email activity //
+                                getContext().startActivity(Intent.createChooser(i, "Send mail..."));
+
+                            } catch (android.content.ActivityNotFoundException ex) {
+
+                                Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
+                            }
+
+                        }
                 });
+
+
                 builder.setView(list);
                 AlertDialog dialog = builder.create();
                 dialog.show();
 
                 Button cb = dialog.getButton(DialogInterface.BUTTON_NEGATIVE);
-                if(cb != null)
+                if (cb != null)
 
                     cb.setTextColor(ContextCompat.getColor(getContext(), R.color.colorButtonDark));
 
                 Button b = dialog.getButton(DialogInterface.BUTTON_POSITIVE);
-                if(b != null)
+                if (b != null)
 
                     b.setTextColor(ContextCompat.getColor(getContext(), R.color.colorButtonDark));
 
@@ -453,6 +483,8 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
     static class QMSalesContactHolder {
         TextView nameTextView;
+        TextView phoneNumberTextView;
+        TextView addressTextView;
         Button sendMaterialsButton;
 
     }
@@ -470,16 +502,23 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture> {
 
 
 public void attachFile(String filename, Intent i) {
+//
+//    File root = Environment.getExternalStorageDirectory();
+//    File file = new File(root, filename);
 
-    File root = Environment.getExternalStorageDirectory();
-    File file = new File(root, filename);
-    if (!file.exists() || !file.canRead()) {
+    String file= filename;
+    File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), file);
+
+    if (!filelocation.exists() || !filelocation.canRead()) {
         Toast.makeText(getContext(), "Error attaching files", Toast.LENGTH_SHORT).show();
         return;
-    }
+    } else {
 
-    Uri uri = Uri.parse("file://" + file);
-    i.putExtra(Intent.EXTRA_STREAM, uri);
+        System.out.println("Attaching file");
+        i.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + filelocation));
+        System.out.println("Uploading from filepath: " + filelocation);
+
+    }
 
 }
 
