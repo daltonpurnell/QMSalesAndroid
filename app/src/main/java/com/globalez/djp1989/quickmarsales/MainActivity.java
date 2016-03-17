@@ -534,7 +534,7 @@ if (savedAccessToken != null) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=dummy.pdf"));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Hardware+Requirements.pdf"));
                                 startActivity(browserIntent);
                             }
 
@@ -585,7 +585,7 @@ if (savedAccessToken != null) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=dummy.pdf"));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Training+Outlines.pdf"));
                                 startActivity(browserIntent);
                             }
 
@@ -611,7 +611,7 @@ if (savedAccessToken != null) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=dummy.pdf"));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Sample+Project+Plan.pdf"));
                                 startActivity(browserIntent);
                             }
 
@@ -667,7 +667,7 @@ if (savedAccessToken != null) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=dummy.pdf"));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Brochure.pdf"));
                                 startActivity(browserIntent);
                             }
 
@@ -693,7 +693,7 @@ if (savedAccessToken != null) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=dummy.pdf"));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Fact+Sheet.pdf"));
                                 startActivity(browserIntent);
                             }
 
