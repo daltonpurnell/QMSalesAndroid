@@ -381,13 +381,13 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                             if (selectedItemsArrayList.contains("Request A Demo")) {
 
                                 // add link to links array
-                                linksArrayList.add("http://www.quickmar.com/demo");
+                                linksArrayList.add("http://www.quickmar.com/demo \n");
 
                             }
                             if (selectedItemsArrayList.contains("Request A Training")) {
 
                                 // add link (doesn't exist yet) to links array
-                                linksArrayList.add("http://www.quickmar.com/demo");
+                                linksArrayList.add("http://www.quickmar.com/demo \n");
 
                             }
                             if (selectedItemsArrayList.contains("Order Materials")) {
@@ -395,7 +395,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                                 // add link and password to links array
                                 linksArrayList.add("http://www.quickmar.com/demo \n " +
                                         "Your username to enter this site is:  \n " +
-                                        "Your password is: ");
+                                        "Your password is: \n");
 
                             }
                             if (selectedItemsArrayList.contains("QuickMAR University")) {
@@ -403,7 +403,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                                 // add link and password to links array
                                 linksArrayList.add("http://www.quickmar.com/demo \n " +
                                         "Your username to enter this site is: shared_training \n " +
-                                        "Your password is: password701");
+                                        "Your password is: password701 \n");
 
                             }
 
@@ -510,9 +510,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
 
 public void attachFile(String filename, Intent i) {
-//
-//    File root = Environment.getExternalStorageDirectory();
-//    File file = new File(root, filename);
 
     String file= filename;
     File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), file);
