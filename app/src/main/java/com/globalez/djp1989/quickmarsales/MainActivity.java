@@ -487,7 +487,7 @@ if (savedAccessToken != null) {
 
 //
 //            // create list of items
-            String[] handyRefItems = new String[] {"Request A Demo", "Request A Training", "Hardware Requirements", "Order Materials", "View Training Course Outlines", "Sample Project Plan",  "QuickMAR University", "News", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
+            String[] handyRefItems = new String[] {"Request A Demo", "Request A Training", "Hardware Requirements", "View Training Course Outlines", "Sample Project Plan",  "QuickMAR University", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
 //
             ArrayList<String> handyRefItemsList = new ArrayList<>();
             handyRefItemsList.addAll(Arrays.asList(handyRefItems));
@@ -542,32 +542,8 @@ if (savedAccessToken != null) {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
+
                     } else if (position == 3) {
-
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
-
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for this site is:\n \n " +
-                                "something\n \n" +
-                                "Your password is:\n \n" +
-                                "something");
-
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.quickmar.com/demo"));
-                                startActivity(browserIntent);
-                            }
-
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
-
-                    } else if (position == 4) {
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(false);
@@ -593,7 +569,7 @@ if (savedAccessToken != null) {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
-                    } else if (position == 5) {
+                    } else if (position == 4) {
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(false);
@@ -619,7 +595,7 @@ if (savedAccessToken != null) {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
-                    } else if (position == 6) {
+                    } else if (position == 5) {
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(false);
@@ -644,12 +620,8 @@ if (savedAccessToken != null) {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
-                    } else if (position == 7) {
 
-                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.quickmar.com/demo"));
-                        startActivity(browserIntent);
-
-                    } else if (position == 8) {
+                    } else if (position == 6) {
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(false);
@@ -675,7 +647,7 @@ if (savedAccessToken != null) {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
-                    } else if (position == 9) {
+                    } else if (position == 7) {
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(false);
@@ -701,7 +673,7 @@ if (savedAccessToken != null) {
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
 
-                    } else if (position == 10) {
+                    } else if (position == 8) {
 
                         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
                         alertDialogBuilder.setCancelable(false);
@@ -719,7 +691,7 @@ if (savedAccessToken != null) {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=dummy.pdf"));
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales"));
                                 startActivity(browserIntent);
                             }
 
@@ -780,7 +752,7 @@ if (savedAccessToken != null) {
             ListView list = (ListView) rootView.findViewById(R.id.mainListView);
 
 //            // create list of items
-            String[] salesToolsItems = new String[] {"Show Video", "Elevator Pitch", "PowerPoint Slides"};
+            String[] salesToolsItems = new String[] {"Show Video", "Elevator Pitch", "PowerPoint Slides", "News", "Order Materials"};
 //
             ArrayList<String> salesToolsItemsList = new ArrayList<>();
             salesToolsItemsList.addAll(Arrays.asList(salesToolsItems));
@@ -835,9 +807,39 @@ if (savedAccessToken != null) {
                         });
                         AlertDialog alertDialog = alertDialogBuilder.create();
                         alertDialog.show();
+                    } else if (position == 3) {
+
+                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
+                        alertDialogBuilder.setCancelable(false);
+
+                        TextView message = new TextView(getContext());
+                        message.setText("Your username for this site is:\n \n " +
+                                "something\n \n" +
+                                "Your password is:\n \n" +
+                                "something");
+
+                        alertDialogBuilder.setMessage(message.getText());
+                        message.setGravity(Gravity.CENTER);
+                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.quickmar.com/demo"));
+                                startActivity(browserIntent);
+                            }
+
+                        });
+                        AlertDialog alertDialog = alertDialogBuilder.create();
+                        alertDialog.show();
+
+
+                    } else if (position == 4) {
+
+                        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.quickmar.com/demo"));
+                        startActivity(browserIntent);
+
                     }
 
-//                    Toast.makeText(getActivity(), "Click ListItem Number " + position, Toast.LENGTH_LONG).show();
                 }
             });
 

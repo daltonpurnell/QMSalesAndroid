@@ -150,35 +150,29 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
                             selectedItemsArrayList.add("Hardware Requirements");
                         }
-                        if (position == 3) {
 
-                            selectedItemsArrayList.add("Order Materials");
-                        }
-                        if (position == 4) {
+                        if (position == 3) {
 
                             selectedItemsArrayList.add("View Training Materials");
                         }
-                        if (position == 5) {
+                        if (position == 4) {
 
                             selectedItemsArrayList.add("Sample Project Plan");
                         }
-                        if (position == 6) {
+                        if (position == 5) {
 
                             selectedItemsArrayList.add("QuickMAR University");
                         }
-                        if (position == 7) {
 
-                            selectedItemsArrayList.add("News");
-                        }
-                        if (position == 8) {
+                        if (position == 6) {
 
                             selectedItemsArrayList.add("Brochure");
                         }
-                        if (position == 9) {
+                        if (position == 7) {
 
                             selectedItemsArrayList.add("Fact Sheet");
                         }
-                        if (position == 10) {
+                        if (position == 8) {
 
                             selectedItemsArrayList.add("I bought QuickMAR. Now what?");
                         }
@@ -187,7 +181,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                 });
 
 //            // create list of items
-                final String[] handyRefItems = new String[]{"Request A Demo", "Request A Training", "Hardware Requirements", "Order Materials", "Training Course Outlines", "Sample Project Plan", "QuickMAR University", "News", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
+                final String[] handyRefItems = new String[]{"Request A Demo", "Request A Training", "Hardware Requirements", "Training Course Outlines", "Sample Project Plan", "QuickMAR University", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
                 final ArrayList<String> handyRefItemsList = new ArrayList<>();
                 handyRefItemsList.addAll(Arrays.asList(handyRefItems));
 //            // build the adapter
@@ -390,14 +384,7 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                                 linksArrayList.add("http://www.quickmar.com/demo \n");
 
                             }
-                            if (selectedItemsArrayList.contains("Order Materials")) {
 
-                                // add link and password to links array
-                                linksArrayList.add("http://www.quickmar.com/demo \n " +
-                                        "Your username to enter this site is:  \n " +
-                                        "Your password is: \n");
-
-                            }
                             if (selectedItemsArrayList.contains("QuickMAR University")) {
 
                                 // add link and password to links array
