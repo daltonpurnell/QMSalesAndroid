@@ -12,6 +12,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
@@ -66,6 +67,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -83,6 +85,7 @@ import com.buddy.sdk.*;
 import com.buddy.sdk.models.*;
 
 import org.apache.http.message.BasicHeader;
+import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -153,6 +156,11 @@ public class MainActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 
 
+        // initialize buddy //
+
+        Buddy.init(getApplicationContext(), "bbbbbc.jmbCPKPDbsdgc", "eb4c3f5f-04a3-1316-f8b3-6d2b2a095688");
+
+
         /** ATTENTION: initialization of dropbox **/
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         String key = prefs.getString("App key", null);
@@ -173,8 +181,8 @@ if (savedAccessToken != null) {
         prefs.edit().putString("App key", APP_KEY).apply();
         prefs.edit().putString("App secret", APP_SECRET).apply();
 
-//        String AccessToken = mDBApi.getSession().getOAuth2AccessToken();
-//        prefs.edit().putString("Access token", AccessToken);
+        String AccessToken = mDBApi.getSession().getOAuth2AccessToken();
+        prefs.edit().putString("Access token", AccessToken);
 
 
 
@@ -195,9 +203,6 @@ if (savedAccessToken != null) {
 
 
 
-                            // initialize buddy //
-
-        Buddy.init(getApplicationContext(), "bbbbbc.jmbCPKPDbsdgc", "eb4c3f5f-04a3-1316-f8b3-6d2b2a095688");
 
 
 
@@ -350,28 +355,6 @@ if (savedAccessToken != null) {
                     System.out.println("Access Token: " + AccessToken);
 
 
-// upload file to dropbox
-//                    AsyncTask.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//
-//                            try {
-//                                File file = new File("/storage/emulated/0/Download/Sample Project Plan.pdf");
-//                                FileInputStream inputStream = new FileInputStream(file);
-//                                DropboxAPI.Entry response = mDBApi.putFile("/Sample Project Plan.pdf", inputStream,
-//                                        file.length(), null, null);
-//                                Log.i("DbExampleLog", "Sample project plan's rev is: " + response.rev);
-//                            } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                System.out.println("ERROR: " + ex);
-//                            }
-//
-//
-//                        }
-//                    });
-
-
                 } catch (IllegalStateException e) {
                     Log.i("DbAuthLog", "Error authenticating", e);
                 }
@@ -475,6 +458,18 @@ if (savedAccessToken != null) {
         public HandyRefFragment() {
         }
 
+
+         /* Checks if external storage is available for read and write */
+         public boolean isExternalStorageWritable() {
+             String state = Environment.getExternalStorageState();
+             if (Environment.MEDIA_MOUNTED.equals(state)) {
+                 return true;
+             }
+             return false;
+         }
+
+
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
@@ -505,6 +500,7 @@ if (savedAccessToken != null) {
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
 
+
                     if (position == 0) {
 
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.quickmar.com/demo"));
@@ -518,82 +514,30 @@ if (savedAccessToken != null) {
 
                     } else if (position == 2) {
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
 
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for the QuickMAR Sales DropBox account is:\n \n " +
-                                "quickmarsalesapp@gmail.com\n \n" +
-                                "Your password is:\n \n" +
-                                "quickmar123\n \n" +
-                                "(You may need to sign out of your DropBox first)");
+                        Intent intent = new Intent(getContext(), HardwareReqView.class);
+                        startActivity(intent);
 
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Hardware+Requirements.pdf"));
-                                startActivity(browserIntent);
-                            }
 
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
 
 
                     } else if (position == 3) {
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
 
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for the QuickMAR Sales DropBox account is:\n \n " +
-                                "quickmarsalesapp@gmail.com\n \n" +
-                                "Your password is:\n \n" +
-                                "quickmar123\n \n" +
-                                "(You may need to sign out of your DropBox first)");
+                        Intent intent = new Intent(getContext(), TrainingOutlinesView.class);
+                        startActivity(intent);
 
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Training+Outlines.pdf"));
-                                startActivity(browserIntent);
-                            }
 
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
 
                     } else if (position == 4) {
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
 
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for the QuickMAR Sales DropBox account is:\n \n " +
-                                "quickmarsalesapp@gmail.com\n \n" +
-                                "Your password is:\n \n" +
-                                "quickmar123\n \n" +
-                                "(You may need to sign out of your DropBox first)");
+                        Intent intent = new Intent(getContext(), SampleProjectPlanView.class);
+                        startActivity(intent);
 
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Sample+Project+Plan.pdf"));
-                                startActivity(browserIntent);
-                            }
-
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
 
                     } else if (position == 5) {
 
@@ -623,89 +567,36 @@ if (savedAccessToken != null) {
 
                     } else if (position == 6) {
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
 
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for the QuickMAR Sales DropBox account is:\n \n " +
-                                "quickmarsalesapp@gmail.com\n \n" +
-                                "Your password is:\n \n" +
-                                "quickmar123\n \n" +
-                                "(You may need to sign out of your DropBox first)");
+                        Intent intent = new Intent(getContext(), BrochureView.class);
+                        startActivity(intent);
 
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Brochure.pdf"));
-                                startActivity(browserIntent);
-                            }
-
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
 
                     } else if (position == 7) {
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
 
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for the QuickMAR Sales DropBox account is:\n \n " +
-                                "quickmarsalesapp@gmail.com\n \n" +
-                                "Your password is:\n \n" +
-                                "quickmar123\n \n" +
-                                "(You may need to sign out of your DropBox first)");
+                        Intent intent = new Intent(getContext(), FactSheetView.class);
+                        startActivity(intent);
 
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
 
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales?preview=Fact+Sheet.pdf"));
-                                startActivity(browserIntent);
-                            }
 
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
 
                     } else if (position == 8) {
 
-                        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getContext());
-                        alertDialogBuilder.setCancelable(false);
+//
+//                        Intent intent = new Intent(getContext(), PDFActivity.class);
+//                        pdfActivity.loadImage(R.mipmap.Hardware_Requirements);
+//                        startActivity(intent);
 
-                        TextView message = new TextView(getContext());
-                        message.setText("Your username for the QuickMAR Sales DropBox account is:\n \n " +
-                                "quickmarsalesapp@gmail.com\n \n" +
-                                "Your password is:\n \n" +
-                                "quickmar123\n \n" +
-                                "(You may need to sign out of your DropBox first)");
 
-                        alertDialogBuilder.setMessage(message.getText());
-                        message.setGravity(Gravity.CENTER);
-                        alertDialogBuilder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.dropbox.com/home/QuickMAR%20Sales"));
-                                startActivity(browserIntent);
-                            }
-
-                        });
-                        AlertDialog alertDialog = alertDialogBuilder.create();
-                        alertDialog.show();
                     }
 
 
-//                    Toast.makeText(getActivity(), "Click ListItem Number " + position, Toast.LENGTH_LONG).show();
                 }
+
+
             });
-
-
 
             return rootView;
         }
@@ -887,6 +778,10 @@ if (savedAccessToken != null) {
             fabButton.setOnClickListener(this);
 
 
+            TextView instructionsTextView = (TextView) rootView.findViewById(R.id.instructions_text_view);
+            instructionsTextView.setText("Tap the '+' to add prospective QuickMAR customers");
+
+
             //populate list view here//
             ListView list = (ListView) rootView.findViewById(R.id.mainList);
 
@@ -940,6 +835,8 @@ if (savedAccessToken != null) {
 //                // permissions this app might request
 //            }
 //        }
+
+
 
 
 
@@ -1118,6 +1015,31 @@ if (savedAccessToken != null) {
 
         }
 
+    }
+
+
+    public void uploadFile() {
+
+        // upload file to dropbox
+//                    AsyncTask.execute(new Runnable() {
+//                        @Override
+//                        public void run() {
+//
+//
+//                            try {
+//                                File file = new File("/storage/emulated/0/Download/Sample Project Plan.pdf");
+//                                FileInputStream inputStream = new FileInputStream(file);
+//                                DropboxAPI.Entry response = mDBApi.putFile("/Sample Project Plan.pdf", inputStream,
+//                                        file.length(), null, null);
+//                                Log.i("DbExampleLog", "Sample project plan's rev is: " + response.rev);
+//                            } catch (FileNotFoundException | DropboxException ex) {
+//
+//                                System.out.println("ERROR: " + ex);
+//                            }
+//
+//
+//                        }
+//                    });
     }
 
 

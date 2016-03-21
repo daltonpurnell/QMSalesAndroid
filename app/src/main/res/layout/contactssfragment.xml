@@ -3,11 +3,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="54dp">
+
+    <TextView
+        android:id="@+id/instructions_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:gravity="center"
+        android:textAllCaps="true"
+        android:textColor="#d3d3d3"
+        android:textSize="18sp"
+        />
+
     <ListView
         android:id="@+id/mainList"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="14dp">
+        android:layout_marginBottom="14dp"
+        android:layout_below="@+id/instructions_text_view">
     </ListView>
     <Button
         style="?android:attr/buttonStyleInset"

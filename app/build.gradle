@@ -37,4 +37,5 @@ dependencies {
     compile files('libraries/aws-android-sdk-ddb-mapper-2.2.12.jar')
     compile files('libraries/cloudmine-android-v0.6.6.jar')
     compile 'com.buddy:androidsdk:+'
+
 }

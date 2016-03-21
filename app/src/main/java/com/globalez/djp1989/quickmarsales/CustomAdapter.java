@@ -233,7 +233,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                             }
                             if (selectedItemsArrayList.contains("Training Course Outlines")) {
 
-                                // doesn't exist yet
                              if (isExternalStorageWritable()) {
 
 

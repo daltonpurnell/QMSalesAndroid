@@ -68,6 +68,7 @@ public class LoginSignupActivity extends AppCompatActivity {
                     SharedPreferences.Editor editor = settings.edit();
                     editor.putString("Username", emailTextView1.getText().toString());
                     editor.putString("Password", passwordTextView1.getText().toString());
+
                     editor.apply();
 
 
