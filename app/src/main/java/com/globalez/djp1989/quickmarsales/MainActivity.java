@@ -475,12 +475,9 @@ if (savedAccessToken != null) {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.handyreffragment, container, false);
 
-
 //            //populate list view here//
-//
            ListView list = (ListView) rootView.findViewById(R.id.mainListView);
 
-//
 //            // create list of items
             String[] handyRefItems = new String[] {"Request A Demo", "Request A Training", "Hardware Requirements", "View Training Course Outlines", "Sample Project Plan",  "QuickMAR University", "Brochure", "Fact Sheet", "I bought QuickMAR. Now what?"};
 //
@@ -491,21 +488,17 @@ if (savedAccessToken != null) {
             ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.simplerow, handyRefItemsList);
 //
 //            // configure the list view
-//
             list.setAdapter(adapter);
-
 
             list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view,
                                         int position, long id) {
 
-
                     if (position == 0) {
 
                         Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.quickmar.com/demo"));
                         startActivity(browserIntent);
-
 
                     } else if (position == 1) {
 
@@ -514,30 +507,18 @@ if (savedAccessToken != null) {
 
                     } else if (position == 2) {
 
-
                         Intent intent = new Intent(getContext(), HardwareReqView.class);
                         startActivity(intent);
 
-
-
-
-
                     } else if (position == 3) {
-
 
                         Intent intent = new Intent(getContext(), TrainingOutlinesView.class);
                         startActivity(intent);
 
-
-
-
                     } else if (position == 4) {
-
 
                         Intent intent = new Intent(getContext(), SampleProjectPlanView.class);
                         startActivity(intent);
-
-
 
                     } else if (position == 5) {
 
@@ -567,31 +548,20 @@ if (savedAccessToken != null) {
 
                     } else if (position == 6) {
 
-
                         Intent intent = new Intent(getContext(), BrochureView.class);
                         startActivity(intent);
 
-
-
                     } else if (position == 7) {
-
 
                         Intent intent = new Intent(getContext(), FactSheetView.class);
                         startActivity(intent);
 
-
-
-
                     } else if (position == 8) {
 
-//
-//                        Intent intent = new Intent(getContext(), PDFActivity.class);
-//                        pdfActivity.loadImage(R.mipmap.Hardware_Requirements);
+//                        Intent intent = new Intent(getContext(), NowWhatView.class);
 //                        startActivity(intent);
 
-
                     }
-
 
                 }
 
