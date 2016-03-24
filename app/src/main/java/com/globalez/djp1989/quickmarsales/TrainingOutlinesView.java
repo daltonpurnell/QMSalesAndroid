@@ -11,7 +11,7 @@ public class TrainingOutlinesView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_outlines_view);
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        TouchImageView imageView = (TouchImageView)findViewById(R.id.imageView);
         imageView.setImageResource(R.mipmap.training_outlines);
     }
 }

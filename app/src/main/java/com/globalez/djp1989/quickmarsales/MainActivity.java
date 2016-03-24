@@ -916,11 +916,11 @@ if (savedAccessToken != null) {
                         // save object to buddy
                         Map<String, Object> parameters = new HashMap<>();
                         parameters.put("data", new BuddyFile(is, "image/png"));
-                        parameters.put("watermark", "" + phoneNumber);
+//                        parameters.put("watermark", "" + phoneNumber);
                         parameters.put("caption", "" + email);
                         parameters.put("readPermissions", "User");
                         parameters.put("writePermissions", "User");
-                        parameters.put("title", "" + name);
+                        parameters.put("title", "" + name + "\n \n" +"" + phoneNumber + "\n \n" + "" + email);
 
                         Buddy.<Picture>post("/pictures", parameters, new BuddyCallback<Picture>(Picture.class) {
                             @Override

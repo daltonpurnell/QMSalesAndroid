@@ -11,7 +11,7 @@ public class NowWhatView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_now_what_view);
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        TouchImageView imageView = (TouchImageView)findViewById(R.id.imageView);
 //        imageView.setImageResource(R.mipmap.brochure);
     }
 }

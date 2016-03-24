@@ -11,7 +11,7 @@ public class SampleProjectPlanView extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sample_project_plan_view);
 
-        ImageView imageView = (ImageView)findViewById(R.id.imageView);
+        TouchImageView imageView = (TouchImageView)findViewById(R.id.imageView);
         imageView.setImageResource(R.mipmap.sample_project_plan);
     }
 }

@@ -55,6 +55,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by djp1989 on 2/25/16.
@@ -101,9 +103,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
             holder = new QMSalesContactHolder();
 
-            holder.phoneNumberTextView = (TextView) row.findViewById(R.id.phoneNumberTextView);
+//            holder.phoneNumberTextView = (TextView) row.findViewById(R.id.phoneNumberTextView);
             holder.nameTextView = (TextView) row.findViewById(R.id.nameTextView);
-            holder.addressTextView = (TextView) row.findViewById(R.id.emailTextView);
+//            holder.addressTextView = (TextView) row.findViewById(R.id.emailTextView);
             holder.sendMaterialsButton = (Button) row.findViewById(R.id.sendEmailButton);
 
             row.setTag(holder);
@@ -118,12 +120,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
         nameString = (salesContactObject).title;
         emailString = (salesContactObject).caption;
-        phoneNumberString = (salesContactObject).watermark;
+
 
         holder.nameTextView.setText("" + nameString);
-        holder.addressTextView.setText("" + emailString);
-        holder.phoneNumberTextView.setText("" + phoneNumberString);
-
 
         holder.sendMaterialsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -394,11 +393,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                             }
 
 
-
-                        // set up message subject and body //
-
+                                // set up message subject and body //
                             i.setType("message/rfc822");
-                            String emailAddressString = (salesContactObject).caption;
+                            String emailAddressString = emailString;
                             i.putExtra(Intent.EXTRA_EMAIL, new String[]{"" + emailAddressString});
                             i.putExtra(Intent.EXTRA_SUBJECT, "I would like to share some QuickMAR materials with you");
                             i.putExtra(Intent.EXTRA_TEXT, "" + linksArrayList);
@@ -442,6 +439,8 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                                 // launch email activity //
                                 getContext().startActivity(Intent.createChooser(i, "Send mail..."));
 
+
+
                             } catch (android.content.ActivityNotFoundException ex) {
 
                                 Toast.makeText(getContext(), "There are no email clients installed.", Toast.LENGTH_SHORT).show();
@@ -478,8 +477,8 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
     static class QMSalesContactHolder {
         TextView nameTextView;
-        TextView phoneNumberTextView;
-        TextView addressTextView;
+//        TextView phoneNumberTextView;
+//        TextView addressTextView;
         Button sendMaterialsButton;
 
     }
@@ -513,6 +512,9 @@ public void attachFile(String filename, Intent i) {
     }
 
 }
+
+
+
 
 
 
