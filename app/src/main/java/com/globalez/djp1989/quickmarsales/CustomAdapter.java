@@ -1,20 +1,16 @@
 package com.globalez.djp1989.quickmarsales;
 
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.Picture;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.DropBoxManager;
 import android.os.Environment;
-import android.preference.PreferenceManager;
-import android.support.annotation.ColorInt;
+
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,40 +19,20 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-import com.buddy.sdk.Buddy;
-import com.buddy.sdk.BuddyFile;
-import com.cloudmine.api.CMObject;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.session.AppKeyPair;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net.URI;
-import java.nio.channels.FileChannel;
+
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 /**
  * Created by djp1989 on 2/25/16.
@@ -71,7 +47,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
     public String emailString = "";
     public static ArrayList<String> selectedItemsArrayList = new ArrayList<>();
     public static ArrayList<String> linksArrayList = new ArrayList<>();
-    private DropboxAPI<AndroidAuthSession> mDBApi;
     final static private String APP_KEY = "h88oe108wiudpge";
     final static private String APP_SECRET = "i69qzlz9mxk6jiu";
     public static ArrayList<Uri> Uris = new ArrayList<>();
@@ -88,9 +63,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
     }
 
-    public void setmDBApi(DropboxAPI api) {
-        mDBApi = api;
-    }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
@@ -203,173 +175,6 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
                                 // create intent for email activity //
                                 final Intent i = new Intent(Intent.ACTION_SEND_MULTIPLE);
 
-                            // download selected files and send as attachment
-                            if (selectedItemsArrayList.contains("Hardware Requirements")) {
-
-                                // download file
-                             if (isExternalStorageWritable()) {
-
-
-                                         try {
-
-                                             File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Hardware Requirements.pdf");
-                                             FileOutputStream outputStream = new FileOutputStream(file);
-                                             DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Hardware Requirements.pdf", null, outputStream, null);
-                                             Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-                                             System.out.println("File downloaded");
-
-                                         } catch (FileNotFoundException | DropboxException ex) {
-
-                                             System.out.println("Exception:" + ex);
-                                         }
-
-
-                             } else {
-
-                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-                             }
-
-                            }
-                            if (selectedItemsArrayList.contains("Training Course Outlines")) {
-
-                             if (isExternalStorageWritable()) {
-
-
-                                         try {
-
-                                             File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Training Outlines.pdf");
-                                             FileOutputStream outputStream = new FileOutputStream(file);
-                                             DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Training Outlines.pdf", null, outputStream, null);
-                                             Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-                                             System.out.println("Success! File downloaded!");
-                                             System.out.println("file path: " + file);
-
-
-
-                                         } catch (FileNotFoundException | DropboxException ex) {
-
-                                             System.out.println("Exception:" + ex);
-                                         }
-
-
-
-                             } else {
-
-                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-                             }
-
-                            }
-                            if (selectedItemsArrayList.contains("Sample Project Plan")) {
-
-                                // download file
-                             if (isExternalStorageWritable()) {
-
-                                 try {
-
-                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Sample Project Plan.pdf");
-                                     FileOutputStream outputStream = new FileOutputStream(file);
-                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Sample Project Plan.pdf", null, outputStream, null);
-                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-                                     System.out.println("Success! File downloaded!");
-                                     System.out.println("file path: " + file);
-
-
-                                 } catch (FileNotFoundException | DropboxException ex) {
-
-                                     System.out.println("Exception:" + ex);
-                                 }
-
-                             } else {
-
-                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-                             }
-
-                            }
-                            if (selectedItemsArrayList.contains("Brochure")) {
-
-                                // download file
-                                if (isExternalStorageWritable()) {
-
-
-                                            try {
-
-                                                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/Brochure.pdf");
-                                                FileOutputStream outputStream = new FileOutputStream(file);
-                                                DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Brochure.pdf", null, outputStream, null);
-                                                Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-                                                System.out.println("Success! File downloaded!");
-                                                System.out.println("file path: " + file);
-
-                                            } catch (FileNotFoundException | DropboxException ex) {
-
-                                                System.out.println("Exception:" + ex);
-                                            }
-
-                                } else {
-
-                                    Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-                                }
-
-
-                            }
-                            if (selectedItemsArrayList.contains("Fact Sheet")) {
-
-                                // download file
-                             if (isExternalStorageWritable()) {
-
-
-                                         try {
-
-                                             File file = new File(Environment.getExternalStorageDirectory().getPath() + "/Fact Sheet.pdf");
-                                             FileOutputStream outputStream = new FileOutputStream(file);
-                                             DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/Fact Sheet.pdf", null, outputStream, null);
-                                             Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-                                             System.out.println("Success! file was downloaded");
-                                             System.out.println("file path: " + file);
-
-
-                                         } catch (FileNotFoundException | DropboxException ex) {
-
-                                             System.out.println("Exception:" + ex);
-                                         }
-
-
-                             } else {
-
-                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-                             }
-
-
-                            }
-                            if (selectedItemsArrayList.contains("I bought QuickMAR. Now what?")) {
-
-                                // download file
-//                             if (isExternalStorageWritable()) {
-//
-//                                 try {
-//
-//                                     File file = new File(Environment.getExternalStorageDirectory().getPath() + "/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf");
-//                                     FileOutputStream outputStream = new FileOutputStream(file);
-//                                     DropboxAPI.DropboxFileInfo info = mDBApi.getFile("/CareSuite_by_QuickMAR and_Manager Brochure v2.1.pdf", null, outputStream, null);
-//                                     Log.i("DbExampleLog", "Success! File info: " + info.getMetadata().rev);
-//                                     Toast.makeText(getContext(), "Success! File was downloaded", Toast.LENGTH_SHORT).show();
-//                                        attachFile("", i);
-//
-//
-//                                 } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                     System.out.println("Exception:" + ex);
-//                                 }
-//
-//                             } else {
-//
-//                                 Toast.makeText(getContext(), "We do not have permission to download to your phone", Toast.LENGTH_SHORT).show();
-//                             }
-//
-//
-                            }
-
-
                             if (selectedItemsArrayList.contains("Request A Demo")) {
 
                                 // add link to links array
@@ -404,33 +209,37 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
 
                                 if (selectedItemsArrayList.contains("Brochure")) {
 
-                                    attachFile("Brochure.pdf", i);
+                                    attachFile(R.mipmap.brochure, i);
 
                                 }
+
                                 if (selectedItemsArrayList.contains("Hardware Requirements")) {
 
-                                    attachFile("Hardware Requirements.pdf", i);
+                                    attachFile(R.mipmap.hardware_requirements, i);
 
                                 }
+
                                 if (selectedItemsArrayList.contains("Training Course Outlines")) {
 
-                                    attachFile("Training Outlines.pdf", i);
+                                    attachFile(R.mipmap.training_outlines, i);
 
                                 }
+
                                 if (selectedItemsArrayList.contains("Sample Project Plan")) {
 
-                                    attachFile("Sample Project Plan.pdf", i);
+                                    attachFile(R.mipmap.sample_project_plan, i);
 
                                 }
 
                                 if (selectedItemsArrayList.contains("Fact Sheet")) {
 
-                                    attachFile("Fact Sheet.pdf", i);
+                                    attachFile(R.mipmap.fact_sheet, i);
 
                                 }
+
                                 if (selectedItemsArrayList.contains("I bought QuickMAR. Now what?")) {
 
-//                                  attachFile("Now What.pdf", i);
+//                                  attachFile(R.mipmap.now_what, i);
                                 }
 
 
@@ -484,37 +293,22 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
     }
 
 
-    /* Checks if external storage is available for read and write */
-    public boolean isExternalStorageWritable() {
-        String state = Environment.getExternalStorageState();
-        if (Environment.MEDIA_MOUNTED.equals(state)) {
-            return true;
-        }
-        return false;
-    }
+
+public void attachFile(int filename, Intent i) {
 
 
-public void attachFile(String filename, Intent i) {
-
-    String file= filename;
-    File filelocation = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), file);
-
-    if (!filelocation.exists() || !filelocation.canRead()) {
-        Toast.makeText(getContext(), "Error attaching files", Toast.LENGTH_SHORT).show();
-        return;
-    } else {
+        Resources resources = getContext().getResources();
 
         System.out.println("Attaching file");
-        Uri uri = Uri.parse("file://" + filelocation);
-        Uris.add(uri);
-        System.out.println("Uploading from filepath: " + filelocation);
+        Uri imageUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE  +
+                "://"  + resources.getResourcePackageName(filename)
+                + '/'  + resources.getResourceTypeName(filename)
+                + '/' + resources.getResourceEntryName(filename));
 
-    }
+        Uris.add(imageUri);
+        System.out.println("Uploading from uri: " + imageUri);
 
 }
-
-
-
 
 
 

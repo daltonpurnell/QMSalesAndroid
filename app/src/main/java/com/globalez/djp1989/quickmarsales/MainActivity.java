@@ -44,37 +44,24 @@ import android.widget.ListView;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.cloudmine.api.CMApiCredentials;
-import com.cloudmine.api.CMObject;
+
 
 import com.cloudmine.api.CMSessionToken;
-import com.cloudmine.api.CMUser;
-import com.cloudmine.api.SearchQuery;
-import com.cloudmine.api.db.LocallySavableCMObject;
-import com.cloudmine.api.rest.HeaderFactory;
-import com.cloudmine.api.rest.response.CMObjectResponse;
-import com.cloudmine.api.rest.response.CMResponse;
-import com.cloudmine.api.rest.response.ObjectModificationResponse;
-import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.exception.DropboxException;
-import com.dropbox.client2.session.AppKeyPair;
+
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+
 
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
@@ -93,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
     final static private String APP_KEY = "h88oe108wiudpge";
     final static private String APP_SECRET = "i69qzlz9mxk6jiu";
-    public static DropboxAPI<AndroidAuthSession> mDBApi;
     public static List<Picture> resultList;
 
 //    public static ArrayAdapter<Picture> customArrayAdapter;
@@ -161,55 +147,13 @@ public class MainActivity extends AppCompatActivity {
         Buddy.init(getApplicationContext(), "bbbbbc.jmbCPKPDbsdgc", "eb4c3f5f-04a3-1316-f8b3-6d2b2a095688");
 
 
-        /** ATTENTION: initialization of dropbox **/
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String key = prefs.getString("App key", null);
-        String secret = prefs.getString("App secret", null);
-        String savedAccessToken = prefs.getString("Access token", null);
-
-if (savedAccessToken != null) {
-
-    System.out.println("Connected to dropbox");
-
-
-} else {
-        AppKeyPair appKeys = new AppKeyPair(APP_KEY, APP_SECRET);
-        AndroidAuthSession session = new AndroidAuthSession(appKeys);
-        mDBApi = new DropboxAPI<AndroidAuthSession>(session);
-
-        mDBApi.getSession().startOAuth2Authentication(this);
-        prefs.edit().putString("App key", APP_KEY).apply();
-        prefs.edit().putString("App secret", APP_SECRET).apply();
-
-        String AccessToken = mDBApi.getSession().getOAuth2AccessToken();
-        prefs.edit().putString("Access token", AccessToken);
-
-
-
-}
-
-
-        /** ATTENTION: initialization of cloudmine **/
-
-        // This will initialize your credentials
-        CMApiCredentials.initialize(APP_ID, API_KEY, getApplicationContext());
-
-
-        // load all user created objects
+        /** ATTENTION: check for current user **/
         SharedPreferences settings = getApplicationContext().getSharedPreferences("UserInfo", 0);
 
         String userName = settings.getString("Username", "");
         System.out.println("Saved Username: " + userName);
 
 
-
-
-
-
-
-
-
-        /** ATTENTION: check for current user **/
 ////        SharedPreferences settings = getSharedPreferences("UserInfo", 0);
 //        if ((settings.getString("Username", "")).isEmpty() && (settings.getString("Password", "")).isEmpty()) {
 
@@ -328,38 +272,6 @@ if (savedAccessToken != null) {
     protected void onResume() {
         super.onResume();
 
-
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String key = prefs.getString("App key", null);
-        String secret = prefs.getString("App secret", null);
-        String savedAccessToken = prefs.getString("Access token", null);
-
-
-        if (savedAccessToken != null) {
-
-            System.out.println("Connected to dropbox");
-
-        } else {
-
-            if (mDBApi.getSession().authenticationSuccessful()) {
-                try {
-                    // Required to complete auth, sets the access token on the session
-                    mDBApi.getSession().finishAuthentication();
-
-                    String AccessToken = mDBApi.getSession().getOAuth2AccessToken();
-                    prefs.edit().putString("App key", APP_KEY).apply();
-                    prefs.edit().putString("App secret", APP_SECRET).apply();
-                    prefs.edit().putString("Access token", AccessToken);
-
-                    System.out.println("Access Token: " + AccessToken);
-
-
-                } catch (IllegalStateException e) {
-                    Log.i("DbAuthLog", "Error authenticating", e);
-                }
-            }
-        }
 
     }
 
@@ -757,9 +669,6 @@ if (savedAccessToken != null) {
 
             customArrayAdapter = new CustomAdapter(getActivity(), R.layout.customrow, LoginSignupActivity.resultList);
             customArrayAdapter.notifyDataSetChanged();
-            customArrayAdapter.setmDBApi(mDBApi);
-
-
 
             list.setAdapter(customArrayAdapter);
 
@@ -987,30 +896,6 @@ if (savedAccessToken != null) {
 
     }
 
-
-    public void uploadFile() {
-
-        // upload file to dropbox
-//                    AsyncTask.execute(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//
-//                            try {
-//                                File file = new File("/storage/emulated/0/Download/Sample Project Plan.pdf");
-//                                FileInputStream inputStream = new FileInputStream(file);
-//                                DropboxAPI.Entry response = mDBApi.putFile("/Sample Project Plan.pdf", inputStream,
-//                                        file.length(), null, null);
-//                                Log.i("DbExampleLog", "Sample project plan's rev is: " + response.rev);
-//                            } catch (FileNotFoundException | DropboxException ex) {
-//
-//                                System.out.println("ERROR: " + ex);
-//                            }
-//
-//
-//                        }
-//                    });
-    }
 
 
 }
