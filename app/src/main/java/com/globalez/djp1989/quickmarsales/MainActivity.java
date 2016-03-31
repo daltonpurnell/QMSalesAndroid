@@ -1,20 +1,14 @@
 package com.globalez.djp1989.quickmarsales;
 
-
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.drawable.Drawable;
+
 import android.net.Uri;
-import android.os.AsyncTask;
-import android.os.Environment;
-import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
+
 import android.provider.ContactsContract;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -28,9 +22,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -41,12 +33,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.cloudmine.api.CMApiCredentials;
-
-
-import com.cloudmine.api.CMSessionToken;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -66,32 +52,20 @@ import java.util.Map;
 import android.provider.ContactsContract.Contacts;
 import android.provider.ContactsContract.CommonDataKinds.Email;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.buddy.sdk.*;
 import com.buddy.sdk.models.*;
 
-import org.apache.http.message.BasicHeader;
-import org.w3c.dom.Text;
 
 
 public class MainActivity extends AppCompatActivity {
 
     public static final int MY_PERMISSIONS_REQUEST_READ_CONTACTS = 0;
-    final static private String APP_KEY = "h88oe108wiudpge";
-    final static private String APP_SECRET = "i69qzlz9mxk6jiu";
     public static List<Picture> resultList;
 
 //    public static ArrayAdapter<Picture> customArrayAdapter;
     public static CustomAdapter customArrayAdapter;
     public static final String TAG = "tag";
-
-
-    // cloudmine stuff
-    private static final String APP_ID = "96364aa624d843d78404473216281ffc";
-    private static final String API_KEY = "442844B89DF645A4B4A8043CD378BA19";
-    private static CMSessionToken currentUserSessionToken;
-    private static CustomCMUser currentUserObject;
 
 
     /**
@@ -369,16 +343,6 @@ public class MainActivity extends AppCompatActivity {
 
         public HandyRefFragment() {
         }
-
-
-         /* Checks if external storage is available for read and write */
-         public boolean isExternalStorageWritable() {
-             String state = Environment.getExternalStorageState();
-             if (Environment.MEDIA_MOUNTED.equals(state)) {
-                 return true;
-             }
-             return false;
-         }
 
 
 

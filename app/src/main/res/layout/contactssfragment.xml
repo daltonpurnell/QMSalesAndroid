@@ -13,7 +13,7 @@
         android:gravity="center"
         android:textAllCaps="true"
         android:textColor="#d3d3d3"
-        android:textSize="18sp"
+        android:textSize="12sp"
         />
 
     <ListView

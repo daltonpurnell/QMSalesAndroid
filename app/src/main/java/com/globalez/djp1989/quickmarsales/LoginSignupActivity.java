@@ -1,30 +1,20 @@
 package com.globalez.djp1989.quickmarsales;
 
 import android.content.SharedPreferences;
-import android.content.SyncAdapterType;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.buddy.sdk.Buddy;
 import com.buddy.sdk.BuddyCallback;
 import com.buddy.sdk.BuddyResult;
 import com.buddy.sdk.models.PagedResult;
 import com.buddy.sdk.models.Picture;
 import com.buddy.sdk.models.User;
-import com.cloudmine.api.CMSessionToken;
-import com.cloudmine.api.CMUser;
-import com.cloudmine.api.rest.response.CreationResponse;
-import com.cloudmine.api.rest.response.LoginResponse;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
