@@ -43,12 +43,9 @@ public class CustomAdapter extends ArrayAdapter<com.buddy.sdk.models.Picture>{
     private Context mContext;
     private List<com.buddy.sdk.models.Picture> mcontactList = new ArrayList<>();
     public String nameString = "";
-    public String phoneNumberString = "";
     public String emailString = "";
     public static ArrayList<String> selectedItemsArrayList = new ArrayList<>();
     public static ArrayList<String> linksArrayList = new ArrayList<>();
-    final static private String APP_KEY = "h88oe108wiudpge";
-    final static private String APP_SECRET = "i69qzlz9mxk6jiu";
     public static ArrayList<Uri> Uris = new ArrayList<>();
 
 

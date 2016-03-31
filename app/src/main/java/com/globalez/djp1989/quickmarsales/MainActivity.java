@@ -65,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
 //    public static ArrayAdapter<Picture> customArrayAdapter;
     public static CustomAdapter customArrayAdapter;
-    public static final String TAG = "tag";
 
 
     /**
